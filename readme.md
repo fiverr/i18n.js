@@ -31,7 +31,7 @@ const i18n = new I18n({
         my: { string: 'a dynamic %{thing} in a static string' }
     }
 });
-i18n.translate('my.string', {thing: 'value'});
+i18n.translate('my.string', {thing: 'value'}); // a dynamic value in a static string
 ```
 
 ### One/other

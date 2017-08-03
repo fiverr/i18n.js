@@ -2,16 +2,24 @@
   "name": "@fiverr/i18n",
   "version": "1.0.0-rc.2",
   "description": "Translation helper",
-  "main": "index.js",
+  "author": "Fiverr dev team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fiverr/i18n-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fiverr/i18n-js/issues"
+  },
+  "homepage": "https://github.com/fiverr/i18n-js#readme",
   "engines": {
     "node": ">=6.9.5"
   },
+  "main": "index.js",
   "scripts": {
     "prepublishOnly": "npm test",
     "test": "./node_modules/mocha/bin/mocha -- test.js --inspect"
   },
-  "author": "Fiverr dev team",
-  "license": "MIT",
   "dependencies": {
     "@fiverr/futile": "^1.9.0",
     "deep-freeze": "0.0.1"
