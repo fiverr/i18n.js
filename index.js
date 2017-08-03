@@ -5,6 +5,7 @@
 
 const resolve = require('@fiverr/futile/lib/resolve');
 const interpolate = require('@fiverr/futile/lib/interpolate');
+const deepassign = require('@fiverr/futile/lib/deepassign');
 const freeze = require('deep-freeze');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
@@ -56,7 +57,7 @@ module.exports = class I18n {
      */
     add(...args) {
         args.unshift({}, this.translations);
-        this[TRANSLATIONS] = freeze(Object.assign(...args));
+        this[TRANSLATIONS] = freeze(deepassign(...args));
 
         return this;
     }

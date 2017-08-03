@@ -80,6 +80,18 @@ describe('I18n', () => {
         expect(i18n.translations.something).to.not.have.any.keys(['add_key']);
     });
 
+    it('adding assigns only relevant endpoints', () => {
+        i18n.add({ new: {item: {a: 'A!', b: 'B!'}} });
+
+        expect(i18n.translate('new.item.a')).to.equal('A!');
+        expect(i18n.translate('new.item.b')).to.equal('B!');
+
+        i18n.add({ new: {item: {b: 'BEE!'}} });
+
+        expect(i18n.translate('new.item.a')).to.equal('A!');
+        expect(i18n.translate('new.item.b')).to.equal('BEE!');
+    });
+
     it('i18n translates keys', () => {
         expect(i18n.translate('root.user.name')).to.equal('Martin');
     });
@@ -143,7 +155,6 @@ describe('I18n', () => {
         i18n.add(more);
 
         expect(i18n.translate('i.am.in.scope')).to.equal('and now for something completely different');
-
     });
 });
 
