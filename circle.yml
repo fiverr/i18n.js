@@ -1,0 +1,13 @@
+machine:
+  node:
+    version: 6.9.5
+
+test:
+  override:
+    - npm test
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master

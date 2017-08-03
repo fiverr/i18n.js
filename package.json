@@ -1,0 +1,23 @@
+{
+  "name": "@fiverr/i18n",
+  "version": "1.0.0-rc.1",
+  "description": "Translation helper",
+  "main": "index.js",
+  "engines": {
+    "node": ">=6.9.5"
+  },
+  "scripts": {
+    "prepublishOnly": "npm test",
+    "test": "./node_modules/mocha/bin/mocha -- test.js --inspect"
+  },
+  "author": "Fiverr dev team",
+  "license": "MIT",
+  "dependencies": {
+    "@fiverr/futile": "^1.9.0",
+    "deep-freeze": "0.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2"
+  }
+}
