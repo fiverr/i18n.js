@@ -8,12 +8,22 @@ npm i @fiverr/i18n -S
 ## Use
 ```javascript
 const I18n = require('@fiverr/i18n');
-const translations_object = require('./my.translations.object');
+const translations = require('./my.translations.object');
 
+const i18n = new I18n({translations});
+```
+
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
+| `missing` | Function | Call this function when a key is missing. Function accepts the key as first argument |
+| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) |
+
+```javascript
 const i18n = new I18n({
-    translations: translations_object,
+    translations: {...},
     missing: key => logMissingKeyEvent({key: `missing_translation.${key.replace(/\W/g, '_')}`}),
-    scope: 'my_scope_string'
+    $scope: 'my_app.page_name'
 });
 ```
 
