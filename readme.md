@@ -1,7 +1,7 @@
 # i18n
 Isomorphic translation engine. Mimics Ruby's i18n interface.
 
-## Install
+## [Install fom NPM](https://www.npmjs.com/package/@fiverr/i18n)
 ```sh
 npm i @fiverr/i18n -S
 ```
