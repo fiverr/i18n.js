@@ -7,17 +7,11 @@ const resolve = require('@fiverr/futile/lib/resolve');
 const interpolate = require('@fiverr/futile/lib/interpolate');
 const deepassign = require('@fiverr/futile/lib/deepassign');
 const freeze = require('deep-freeze');
+const getOneOther = require('./utils/get-one-other');
+const jsonclone = require('./utils/jsonclone');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
-
-function jsonclone(object) {
-    try {
-        return JSON.parse(JSON.stringify(object));
-    } catch (e) {
-        return {};
-    }
-};
 
 /**
  * @class I18n
@@ -68,11 +62,13 @@ module.exports = class I18n {
      * @param  {Object} [data] Interpolation data
      * @return {String} translated and interpolated
      */
-    translate(key = '', data) {
+    translate(key, data) {
         let result = this.find(...[data, this].reduce((alternatives, item) => {
             const base = resolve('$scope', item);
 
-            base !== undefined && alternatives.push([base, key].join('.'));
+            if (base !== undefined) {
+                alternatives.push([base, key].join('.'));
+            }
 
             return alternatives;
         }, [key]));
@@ -85,7 +81,6 @@ module.exports = class I18n {
             case 'number':
             case 'boolean':
                 return result;
-                break;
             case 'string':
                 if (result) {
                     return interpolate(result, data);
@@ -109,26 +104,4 @@ module.exports = class I18n {
 
         return done ? result : this.find(...alternatives);
     }
-
-}
-
-function getOneOther(result, data) {
-    if (isOneOther(result, data)) {
-        return Number(data.count) === 1 ? result.one : result.other;
-    }
-
-    return result;
-}
-
-/**
- * Check conditions for a one/other use case
- * @param  {Object|Any} result
- * @param  {Object|Any} data
- * @return {Boolean} The conditions meet a one/other use case
- */
-const isOneOther = (result, data) =>
-    typeof result === 'object' &&
-    typeof data === 'object' &&
-    result.hasOwnProperty('one') &&
-    result.hasOwnProperty('other') &&
-    data.hasOwnProperty('count');
+};

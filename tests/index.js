@@ -1,51 +1,7 @@
 const {assert, expect} = require('chai');
 
-const I18n = require('./');
-const translations = {
-    root: {
-        user: {
-            name: 'Martin',
-            last: 'Prince'
-        },
-        wait: {
-            one: 'Wait one day',
-            other: 'Wait %{count} days'
-        },
-        is: {
-            a: {
-                number: 1,
-                object: {a: 2},
-                boolean: false,
-                null: null
-            }
-        },
-        interpolated: {
-            phrase: 'Please replace %{item} with %{item} and %{another} thing'
-        }
-    },
-    controller_name: {
-        action_name: {
-            i: {
-                am: {
-                    in: {
-                        scope: 'I am in scope'
-                    }
-                }
-            }
-        }
-    },
-    another_controller_name: {
-        action_name: {
-            i: {
-                am: {
-                    in: {
-                        scope: 'I am in a different scope'
-                    }
-                }
-            }
-        }
-    }
-};
+const I18n = require('../');
+const translations = require('./translations-stub');
 const $scope = 'controller_name.action_name';
 
 describe('I18n', () => {
@@ -158,18 +114,4 @@ describe('I18n', () => {
     });
 });
 
-describe('missing keys report', () => {
-    it('reports missing keys', () => {
-        const i18n = new I18n({
-            $scope: 'some.scope',
-            missing: (key, scope, translations) => {
-                expect(scope).to.equal('some.scope');
-                expect(key).to.equal('a.missing.key');
-                expect(translations).to.be.an('object');
-                expect(translations).to.be.empty;
-            }
-        });
-
-        i18n.translate('a.missing.key');
-    });
-});
+require('./missing-key')();
