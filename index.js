@@ -17,14 +17,16 @@ const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
  * @class I18n
  * @classdesc an object capable of translating keys and interpolate using given data object
  * @param {Object}   options.translations JSON compliant object
- * @param {String}   options.$scope       Root string to be use for looking for translation keys
- * @param {Function} options.missing      Method to call when key is not found
+ * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
+ * @param {Function} [options.missing]    Method to call when key is not found
  */
 module.exports = class I18n {
-    constructor({translations, $scope, missing}) {
+    constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = missing || (() => {});
         this.$scope = $scope;
+
+        this.translate = this.translate.bind(this);
     }
 
     /**
