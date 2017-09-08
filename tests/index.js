@@ -60,6 +60,15 @@ describe('I18n', () => {
         const translate = i18n.translate;
 
         expect(translate('root.user.name')).to.equal('Martin');
+
+        const t = i18n.t;
+
+        expect(t('root.user.name')).to.equal('Martin');
+    });
+
+    it('i18n t aliases translate', () => {
+        expect(i18n.t).to.equal(i18n.translate);
+        expect(i18n.t('root.user.name')).to.equal('Martin');
     });
 
     it('interpolates values', () => {

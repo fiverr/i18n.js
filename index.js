@@ -47,6 +47,14 @@ module.exports = class I18n {
     }
 
     /**
+     * t alias to translate
+     * @return {Function}
+     */
+    get t() {
+        return this.translate;
+    }
+
+    /**
      * Add translation object(s)
      * @param {[type]} translations [description]
      * @return {self}
