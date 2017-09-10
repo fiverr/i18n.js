@@ -2,12 +2,10 @@
 Isomorphic translation engine. Mimics Ruby's i18n interface.
 
 [![npm](https://img.shields.io/npm/v/@fiverr/i18n.svg)](https://www.npmjs.com/package/@fiverr/i18n)
-[![CircleCI](https://img.shields.io/circleci/project/github/fiverr/i18n-js.svg)](https://circleci.com/gh/fiverr/i18n-js)
-[![GitHub issues](https://img.shields.io/github/issues/fiverr/i18n-js.svg)](https://github.com/fiverr/i18n-js/issues)
+[![CircleCI](https://img.shields.io/circleci/project/github/fiverr/i18n.js.svg)](https://circleci.com/gh/fiverr/i18n.js)
 
-[![bitHound Overall Score](https://www.bithound.io/github/fiverr/i18n-js/badges/score.svg)](https://www.bithound.io/github/fiverr/i18n-js)
-[![bitHound Dependencies](https://www.bithound.io/github/fiverr/i18n-js/badges/dependencies.svg)](https://www.bithound.io/github/fiverr/i18n-js/master/dependencies/npm)
-[![bitHound Dev Dependencies](https://www.bithound.io/github/fiverr/i18n-js/badges/devDependencies.svg)](https://www.bithound.io/github/fiverr/i18n-js/master/dependencies/npm)
+[![bitHound Overall Score](https://www.bithound.io/github/fiverr/i18n.js/badges/score.svg)](https://www.bithound.io/github/fiverr/i18n.js)
+[![bitHound Dependencies](https://www.bithound.io/github/fiverr/i18n.js/badges/dependencies.svg)](https://www.bithound.io/github/fiverr/i18n.js/master/dependencies/npm)
 
 
 ## [Install fom NPM](https://www.npmjs.com/package/@fiverr/i18n)

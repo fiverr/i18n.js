@@ -1,6 +1,4 @@
-CHANGELOG.md
 npm-debug.log
-*/.*
-*/circle.yml
-test.js
-*/test.js
+.*
+circle.yml
+test/*
