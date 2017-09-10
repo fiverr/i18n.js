@@ -12,6 +12,10 @@ describe('I18n', () => {
         assert(i18n.$scope === $scope);
     });
 
+    it('can initiate w/o options', () => {
+        expect(() => new I18n()).to.not.throw();
+    });
+
     it('instance translations cannot be set', () => {
         const newTranslations = {a: 1};
         i18n.translations = newTranslations;
@@ -50,6 +54,12 @@ describe('I18n', () => {
 
     it('i18n translates keys', () => {
         expect(i18n.translate('root.user.name')).to.equal('Martin');
+    });
+
+    it('translate function is bound to instance', () => {
+        const translate = i18n.translate;
+
+        expect(translate('root.user.name')).to.equal('Martin');
     });
 
     it('interpolates values', () => {
