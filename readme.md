@@ -41,6 +41,8 @@ const i18n = new I18n({
 i18n.add({yet: {another: {key: 'I\'m here, too!'}}});
 Use:
 i18n.translate('yet.another.key'); // I'm here, too!
+Or:
+i18n.t('yet.another.key'); // I'm here, too!
 ```
 
 ## Features
