@@ -1,5 +1,5 @@
 # i18n
-Isomorphic translation engine. Mimics Ruby's i18n interface.
+Isomorphic translation engine. Mimics Rails' i18n interface.
 
 [![npm](https://img.shields.io/npm/v/@fiverr/i18n.svg)](https://www.npmjs.com/package/@fiverr/i18n)
 [![CircleCI](https://img.shields.io/circleci/project/github/fiverr/i18n.js.svg)](https://circleci.com/gh/fiverr/i18n.js)
