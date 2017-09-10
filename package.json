@@ -1,6 +1,6 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.1.0-rc",
+  "version": "1.1.0",
   "description": "Translation helper",
   "author": "Fiverr dev team",
   "license": "MIT",
@@ -13,19 +13,23 @@
   },
   "homepage": "https://github.com/fiverr/i18n-js#readme",
   "engines": {
-    "node": ">=6.9.5"
+    "node": ">=6.9.4"
   },
   "main": "index.js",
   "scripts": {
-    "prepublishOnly": "npm test",
-    "test": "./node_modules/mocha/bin/mocha -- tests/index.js --inspect"
+    "prepublishOnly": "npm t && npm run lint",
+    "test": "./node_modules/mocha/bin/mocha -- tests/index.js --inspect",
+    "lint": "./node_modules/eslint/bin/eslint.js -c .eslintrc **/* --quiet"
   },
   "dependencies": {
-    "@fiverr/futile": "^1.9.0",
+    "@fiverr/futile": "^1.10.0",
     "deep-freeze": "0.0.1"
   },
   "devDependencies": {
-    "chai": "^4.1.0",
-    "mocha": "^3.4.2"
+    "@fiverr/eslint-config-fiverr": "0.0.16",
+    "chai": "^4.1.2",
+    "eslint": "^4.6.1",
+    "eslint-plugin-react": "^7.3.0",
+    "mocha": "^3.5.1"
   }
 }

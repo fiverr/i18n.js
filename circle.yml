@@ -1,10 +1,16 @@
 machine:
   node:
-    version: 6.9.5
+    version: 6.9.4
+
+dependencies:
+  override:
+    - npm i
+    - nvm install 8.4.0
 
 test:
   override:
-    - npm test
+    - nvm use 6.9.4 && npm t && npm run lint
+    - nvm use 8.4.0 && npm t && npm run lint
 
 experimental:
   notify:

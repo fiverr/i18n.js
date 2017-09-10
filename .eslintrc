@@ -1,0 +1,24 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "script",
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "env": {},
+  "globals": {
+    "require": true,
+    "module": true,
+    "describe",
+    "it"
+  },
+  "extends": [
+    "@fiverr/eslint-config-fiverr/rules/base",
+    "@fiverr/eslint-config-fiverr/rules/es6"
+  ],
+  "plugins": [],
+  "rules": {
+    "no-console": 0
+  }
+}
