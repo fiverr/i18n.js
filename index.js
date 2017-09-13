@@ -6,6 +6,7 @@
 const resolve = require('@fiverr/futile/lib/resolve');
 const interpolate = require('@fiverr/futile/lib/interpolate');
 const deepassign = require('@fiverr/futile/lib/deepassign');
+const _global = require('@fiverr/futile/lib/global');
 const freeze = require('deep-freeze');
 const getOneOther = require('./utils/get-one-other');
 const jsonclone = require('./utils/jsonclone');
@@ -113,5 +114,16 @@ module.exports = class I18n {
         const done = typeof result !== 'undefined' || alternatives.length === 0;
 
         return done ? result : this.find(...alternatives);
+    }
+
+    /**
+     * Make sure you only have one instance of I18n in your global scope
+     * @return {I18n} the same instance every time
+     *
+     * @example
+     * const i18n = I18n.singleton;
+     */
+    static get singleton() {
+        return _global.i18n = _global.i18n || new I18n();
     }
 };

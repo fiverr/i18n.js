@@ -1,7 +1,7 @@
 const {assert, expect} = require('chai');
 
 const I18n = require('../');
-const translations = require('./translations-stub');
+const translations = require('./translations-stub.json');
 const $scope = 'controller_name.action_name';
 
 describe('I18n', () => {
@@ -132,5 +132,3 @@ describe('I18n', () => {
         expect(i18n.translate('i.am.in.scope')).to.equal('and now for something completely different');
     });
 });
-
-require('./missing-key')();

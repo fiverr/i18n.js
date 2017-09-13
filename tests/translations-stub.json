@@ -1,0 +1,45 @@
+{
+    "root": {
+        "user": {
+            "name": "Martin",
+            "last": "Prince"
+        },
+        "wait": {
+            "one": "Wait one day",
+            "other": "Wait %{count} days"
+        },
+        "is": {
+            "a": {
+                "number": 1,
+                "object": {"a": 2},
+                "boolean": false,
+                "null": null
+            }
+        },
+        "interpolated": {
+            "phrase": "Please replace %{item} with %{item} and %{another} thing"
+        }
+    },
+    "controller_name": {
+        "action_name": {
+            "i": {
+                "am": {
+                    "in": {
+                        "scope": "I am in scope"
+                    }
+                }
+            }
+        }
+    },
+    "another_controller_name": {
+        "action_name": {
+            "i": {
+                "am": {
+                    "in": {
+                        "scope": "I am in a different scope"
+                    }
+                }
+            }
+        }
+    }
+}

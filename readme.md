@@ -96,3 +96,17 @@ const i18n = new I18n({
 // Use:
 i18n.translate('title', {username: 'Arthur', $scope: 'users.get'}); // Arthur's page
 ```
+
+### Singleton
+Make sure you only have one instance of I18n in your global scope
+```javascript
+const i18n = I18n.singleton;
+
+i18n.$scope = 'my.scope'; // Optional
+i18n.add({...});
+```
+Shortcut:
+```javascript
+const i18n = require('@fiverr/i18n/singleton');
+```
+
