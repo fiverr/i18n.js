@@ -6,12 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fiverr/i18n-js.git"
+    "url": "git+https://github.com/fiverr/i18n.js.git"
   },
   "bugs": {
-    "url": "https://github.com/fiverr/i18n-js/issues"
+    "url": "https://github.com/fiverr/i18n.js/issues"
   },
-  "homepage": "https://github.com/fiverr/i18n-js#readme",
+  "homepage": "https://github.com/fiverr/i18n.js#readme",
   "engines": {
     "node": ">=6.9.4"
   },
