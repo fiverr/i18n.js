@@ -30,7 +30,7 @@ const i18n = new I18n({translations});
 const i18n = new I18n({
     translations: {...},
     missing: key => logMissingKeyEvent({key: `missing_translation.${key.replace(/\W/g, '_')}`}),
-    $scope: 'my_app.page_name'
+    $scope: 'my_app.en'
 });
 ```
 
@@ -52,7 +52,7 @@ const i18n = new I18n({
         my: { string: 'a dynamic %{thing} in a static string' }
     }
 });
-i18n.translate('my.string', {thing: 'value'}); // a dynamic value in a static string
+i18n.t('my.string', {thing: 'value'}); // a dynamic value in a static string
 ```
 
 ### One/other
@@ -65,9 +65,9 @@ const i18n = new I18n({
         }
     }
 });
-i18n.translate('it_will_take_me_days', {count: 1}); // It'll take me one day
-i18n.translate('it_will_take_me_days', {count: 3}); // It'll take me 3 days
-i18n.translate('it_will_take_me_days', {count: 'a lot of'}); // It'll take me a lot of days
+i18n.t('it_will_take_me_days', {count: 1}); // It'll take me one day
+i18n.t('it_will_take_me_days', {count: 3}); // It'll take me 3 days
+i18n.t('it_will_take_me_days', {count: 'a lot of'}); // It'll take me a lot of days
 ```
 
 ### Instance with a scope
@@ -85,7 +85,7 @@ const i18n = new I18n({
     $scope: 'users.get'
 });
 // Use:
-i18n.translate('title', {username: 'Arthur'}); // Arthur's page
+i18n.t('title', {username: 'Arthur'}); // Arthur's page
 
 // Single use scope (passed in with data)
 const i18n = new I18n({
@@ -94,7 +94,22 @@ const i18n = new I18n({
     }
 });
 // Use:
-i18n.translate('title', {username: 'Arthur', $scope: 'users.get'}); // Arthur's page
+i18n.t('title', {username: 'Arthur', $scope: 'users.get'}); // Arthur's page
+```
+
+### Scoped child instance
+This is a good option for shorthand in enclosed parts of the application.
+
+The translation store is shared so the parent can find the keys if it prefixes the namespace, and the child doesn't need to.
+```javascript
+const usersI18n = i18n.spawn('users.get');
+
+// Add translations under the scope
+usersI18n.add({introduction: 'Hi, my name is %{username}'});
+
+// Use translations
+usersI18n.t('introduction', {username: 'Martin'}); // Hi, my name is Martin
+i18n.t('users.get.introduction', {username: 'Martin'}); // Hi, my name is Martin
 ```
 
 ### Singleton

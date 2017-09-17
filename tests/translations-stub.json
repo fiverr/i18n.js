@@ -41,5 +41,11 @@
                 }
             }
         }
+    },
+    "en": {
+        "title": "My App",
+        "page": {
+            "title": "My Page"
+        }
     }
 }
