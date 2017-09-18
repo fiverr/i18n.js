@@ -24,7 +24,7 @@ const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 class I18n {
     constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
-        this[MISSING] = missing || (() => {});
+        this[MISSING] = missing || (() => {}); // eslint-disable-line no-empty-function
         this.$scope = $scope;
 
         this.translate = this.translate.bind(this);
@@ -179,7 +179,7 @@ class I18nChild extends I18n {
                 }, base);
 
                 return base;
-            }))
+            }));
         } else {
             this.parent.add(...args);
         }
