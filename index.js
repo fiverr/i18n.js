@@ -17,11 +17,11 @@ const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 /**
  * @class I18n
  * @classdesc an object capable of translating keys and interpolate using given data object
- * @param {Object}   options.translations JSON compliant object
- * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
- * @param {Function} [options.missing]    Method to call when key is not found
+ * @param {Object<Object>}   options.translations JSON compliant object
+ * @param {Object<String>}   [options.$scope]     Root string to be use for looking for translation keys
+ * @param {Object<Function>} [options.missing]    Method to call when key is not found
  */
-module.exports = class I18n {
+class I18n {
     constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = missing || (() => {});
@@ -57,7 +57,7 @@ module.exports = class I18n {
 
     /**
      * Add translation object(s)
-     * @param {[type]} translations [description]
+     * @param {Object(s)} translations [description]
      * @return {self}
      */
     add(...args) {
@@ -117,6 +117,15 @@ module.exports = class I18n {
     }
 
     /**
+     * Spawns a scoped child
+     * @param  {String}    scope Namespace
+     * @return {I18nChild}       I18nChild instance
+     */
+    spawn(scope) {
+        return new I18nChild(this, scope);
+    }
+
+    /**
      * Make sure you only have one instance of I18n in your global scope
      * @return {I18n} the same instance every time
      *
@@ -126,4 +135,57 @@ module.exports = class I18n {
     static get singleton() {
         return _global.i18n = _global.i18n || new I18n();
     }
-};
+}
+
+/**
+ * @class I18nChild
+ * @extends I18n
+ * @classdesc A child with the same capabilities and access but which translation keys may be namespcaed
+ * @param  {String} [$scope]
+ */
+class I18nChild extends I18n {
+    constructor(parent, $scope) {
+        super();
+        const scopeChain = [];
+
+        parent.$scope && scopeChain.push(parent.$scope);
+        $scope && scopeChain.push($scope);
+
+        this.$scope = scopeChain.join('.') || undefined;
+        this.parent = parent;
+    }
+
+    /**
+     * translations
+     * @return {Object} parent's translations object
+     */
+    get translations() {
+        return this.parent.translations;
+    }
+
+    /**
+     * Passes the translations to the parent's store under the namespace
+     * @param {...Object} args Translation objects
+     */
+    add(...args) {
+        if (this.$scope) {
+            this.parent.add(...args.map((arg) => {
+                const base = {};
+
+                this.$scope.split('.').reduce((base, item, index, array) => {
+                    base[item] = index === array.length - 1 ? arg : {};
+
+                    return base[item];
+                }, base);
+
+                return base;
+            }))
+        } else {
+            this.parent.add(...args);
+        }
+
+        return this;
+    }
+}
+
+module.exports = I18n;
