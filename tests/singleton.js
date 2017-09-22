@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const importFresh = require('import-fresh');
-
+const _global = require('@fiverr/futile/lib/global');
 
 describe('Singleton', () => {
     it('sanity on importFresh', () => {
@@ -24,5 +24,28 @@ describe('Singleton', () => {
 
         expect(i18n_b.t('a')).to.equal('one');
         expect(i18n_b.t('b')).to.equal('three');
+    });
+
+    describe('singleton is locked to the global scope', () => {
+        const i18nInstance = importFresh('../').singleton;
+
+        it('Gets the global name "i18n"', () => {
+            expect(i18nInstance).to.equal(_global.i18n);
+        });
+
+        it('Can not be re assigned', () => {
+            _global.i18n = null;
+            expect(_global.i18n).to.equal(i18nInstance);
+            expect(_global.i18n).to.not.equal(null);
+        });
+
+        it('Can not ne deleted', () => {
+            delete _global.i18n;
+            expect(_global.i18n).to.be.an('object');
+        });
+
+        it('Is not enumerable on the global object', () => {
+            expect(_global).to.not.have.any.keys('i18n');
+        });
     });
 });
