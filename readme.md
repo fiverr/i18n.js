@@ -117,7 +117,9 @@ Make sure you only have one instance of I18n in your global scope
 ```javascript
 const i18n = I18n.singleton;
 
-i18n.$scope = 'my.scope'; // Optional
+// Optional:
+i18n.$scope = 'my.scope';
+i18n.onmiss((key, scope) => console.error(`Missing key "${key}" ${scope ? `In scope: "${scope}"`}`));
 i18n.add({...});
 ```
 Shortcut:

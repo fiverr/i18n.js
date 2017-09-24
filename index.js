@@ -24,7 +24,8 @@ const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 class I18n {
     constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
-        this[MISSING] = missing || (() => {}); // eslint-disable-line no-empty-function
+        this[MISSING] = [];
+        this.onmiss(missing);
         this.$scope = $scope;
 
         this.translate = this.translate.bind(this);
@@ -98,7 +99,7 @@ class I18n {
                 }
                 break;
             default:
-                this[MISSING](key, this.$scope, this.translations);
+                this[MISSING].forEach(fn => fn(key, this.$scope, this.translations));
                 return I18n.getDefault(key);
         }
     }
@@ -114,6 +115,22 @@ class I18n {
         const done = typeof result !== 'undefined' || alternatives.length === 0;
 
         return done ? result : this.find(...alternatives);
+    }
+
+    /**
+     * Register callback to be called when a translation was missing.
+     * Function accepts arguments: {String} missing key
+     *                             {String} translation scope
+     *                             {Object} The entire translation dictionary
+     * @param  {Function} callback
+     * @return {self}
+     *
+     * @example
+     * i18n.onmiss((key) => logMissingKeyEvent({key: key.replace(/\W/g, '_'), })
+     */
+    onmiss(callback) {
+        typeof callback === 'function' && this[MISSING].push(callback);
+        return this;
     }
 
     /**
@@ -133,7 +150,24 @@ class I18n {
      * const i18n = I18n.singleton;
      */
     static get singleton() {
-        return _global.i18n = _global.i18n || new I18n();
+        if (_global.i18n) {
+            return _global.i18n;
+        }
+
+        const i18n = new I18n();
+
+        try {
+            Object.defineProperty(_global, 'i18n', {
+                value: i18n,
+                writable: false,
+                enumerable: false,
+                configurable: false
+            });
+        } catch (e) {
+            _global.i18n = i18n;
+        }
+
+        return i18n;
     }
 }
 
