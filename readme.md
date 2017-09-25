@@ -112,7 +112,34 @@ usersI18n.t('introduction', {username: 'Martin'}); // Hi, my name is Martin
 i18n.t('users.get.introduction', {username: 'Martin'}); // Hi, my name is Martin
 ```
 
-### Singleton
+### Instance
+Exposes an empty instance of i18n
+```javascript
+const i18n = require('@fiverr/i18n/instance');
+
+i18n.add({...});
+```
+
+Made especially for use as a webpack external
+```javascript
+externals: {
+  '@fiverr/i18n/instance': 'i18n'
+}
+```
+
+> Name can alternate:
+> ```javascript
+> import phraser from '@fiverr/i18n/instance';
+> ```
+>
+> ```javascript
+> externals: {
+>   '@fiverr/i18n/instance': 'phraser'
+> }
+> ```
+
+
+### Singleton (i18n)
 Make sure you only have one instance of I18n in your global scope
 ```javascript
 const i18n = I18n.singleton;
