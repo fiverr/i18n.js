@@ -153,4 +153,11 @@ Shortcut:
 ```javascript
 const i18n = require('@fiverr/i18n/singleton');
 ```
+Or simply
+
+```javascript
+require('@fiverr/i18n/singleton');
+
+// i18n is defined globally
+```
 
