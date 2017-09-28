@@ -101,6 +101,8 @@ i18n.t('title', {username: 'Arthur', $scope: 'users.get'}); // Arthur's page
 This is a good option for shorthand in enclosed parts of the application.
 
 The translation store is shared so the parent can find the keys if it prefixes the namespace, and the child doesn't need to.
+
+The child can also find "global" translations (ones that are outside it's namespace)
 ```javascript
 const usersI18n = i18n.spawn('users.get');
 
