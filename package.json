@@ -1,6 +1,6 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.5.0",
+  "version": "1.5.1-rc.1",
   "description": "Translation helper",
   "author": "Fiverr dev team",
   "license": "MIT",
