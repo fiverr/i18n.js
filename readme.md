@@ -1,4 +1,6 @@
 # i18n
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/fiverr/i18n.js.svg)](https://greenkeeper.io/)
 Isomorphic translation engine. Mimics Rails' i18n interface.
 
 [![npm](https://img.shields.io/npm/v/@fiverr/i18n.svg)](https://www.npmjs.com/package/@fiverr/i18n)
