@@ -26,7 +26,7 @@
     "deep-freeze": "0.0.1"
   },
   "devDependencies": {
-    "@fiverr/eslint-config-fiverr": "0.0.18",
+    "@fiverr/eslint-config-fiverr": "1.0.0",
     "chai": "^4.1.2",
     "eslint": "^4.7.0",
     "eslint-plugin-react": "^7.3.0",
