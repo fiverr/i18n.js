@@ -26,6 +26,12 @@ describe('Singleton', () => {
         expect(i18n_b.t('b')).to.equal('three');
     });
 
+    it('returns whatever is already on the global scope', () => {
+        _global.i18n.appendix = 'appendix';
+        const i18n_a = importFresh('../').singleton;
+        expect(i18n_a.appendix).to.equal('appendix');
+    });
+
     describe('singleton is locked to the global scope', () => {
         const i18nInstance = importFresh('../').singleton;
 
