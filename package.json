@@ -1,19 +1,16 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Translation helper",
   "author": "Fiverr dev team",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fiverr/i18n.js.git"
-  },
-  "bugs": {
-    "url": "https://github.com/fiverr/i18n.js/issues"
-  },
   "homepage": "https://github.com/fiverr/i18n.js#readme",
   "engines": {
     "node": ">=6.9.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fiverr/i18n.js.git"
   },
   "main": "index.js",
   "scripts": {
