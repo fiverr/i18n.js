@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const importFresh = require('import-fresh');
-const _global = require('@fiverr/futile/lib/global');
+const _global = global;
 
 describe('Singleton', () => {
     it('sanity on importFresh', () => {
