@@ -3,10 +3,10 @@
  * @since 1.0.0
  */
 
-const resolve = require('@fiverr/futile/lib/resolve');
-const interpolate = require('@fiverr/futile/lib/interpolate');
-const deepassign = require('@fiverr/futile/lib/deepassign');
-const _global = require('@fiverr/futile/lib/global');
+const get = require('lodash.get');
+const paraphrase = require('paraphrase/dist');
+const merge = require('lodash.merge');
+const _global = require('./utils/glob');
 const freeze = require('deep-freeze');
 const getOneOther = require('./utils/get-one-other');
 const jsonclone = require('./utils/jsonclone');
@@ -14,6 +14,8 @@ const jsonclone = require('./utils/jsonclone');
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 const MEMORY = typeof Symbol === 'function' ? Symbol() : '_memory';
+
+const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g);
 
 /**
  * @class I18n
@@ -67,7 +69,7 @@ class I18n {
         this[MEMORY] = {}; // clear key lookup memory
 
         args.unshift({}, this.translations);
-        this[TRANSLATIONS] = freeze(deepassign(...args));
+        this[TRANSLATIONS] = freeze(merge(...args));
 
         return this;
     }
@@ -80,7 +82,7 @@ class I18n {
      */
     translate(key, data) {
         let result = this.find(...[data, this].reduce((alternatives, item) => {
-            const base = resolve('$scope', item);
+            const base = get(item, '$scope');
 
             if (base !== undefined) {
                 alternatives.push([base, key].join('.'));
@@ -103,7 +105,7 @@ class I18n {
                 }
                 break;
             default:
-                this[MISSING].forEach(fn => fn(key, this.$scope, this.translations));
+                this[MISSING].forEach((fn) => fn(key, this.$scope, this.translations));
                 return I18n.getDefault(key);
         }
     }
@@ -127,7 +129,7 @@ class I18n {
      * @return {Any}
      */
     resolve(key) {
-        return this[MEMORY][key] = this[MEMORY].hasOwnProperty(key) ? this[MEMORY][key] : resolve(key, this.translations);
+        return this[MEMORY][key] = this[MEMORY].hasOwnProperty(key) ? this[MEMORY][key] : get(this.translations, key);
     }
 
     /**
