@@ -6,12 +6,8 @@
       "impliedStrict": true
     }
   },
-  "env": {},
-  "globals": {
-    "require": true,
-    "module": true,
-    "describe",
-    "it"
+  "env": {
+    "node": true
   },
   "extends": [
     "@fiverr/eslint-config-fiverr/rules/base",
@@ -20,5 +16,18 @@
   "plugins": [],
   "rules": {
     "no-console": 0
-  }
+  },
+  "overrides": [
+    {
+      "files": [ "tests/*" ],
+      "env": {
+        "mocha": true
+      },
+      "globals": {
+        "global": true,
+        "expect": true,
+        "assert": true
+      }
+    }
+  ]
 }
