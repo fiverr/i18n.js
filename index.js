@@ -4,7 +4,7 @@
  */
 
 const get = require('lodash.get');
-const paraphrase = require('paraphrase/dist');
+const paraphrase = require('paraphrase');
 const merge = require('lodash.merge');
 const _global = require('./utils/glob');
 const freeze = require('deep-freeze');
