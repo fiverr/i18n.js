@@ -13,7 +13,6 @@ const jsonclone = require('./utils/jsonclone');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
-const MEMORY = typeof Symbol === 'function' ? Symbol() : '_memory';
 
 const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g);
 
@@ -28,7 +27,6 @@ class I18n {
     constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = [];
-        this[MEMORY] = {};
         this.onmiss(missing);
         this.$scope = $scope;
 
@@ -66,8 +64,6 @@ class I18n {
      * @return {self}
      */
     add(...args) {
-        this[MEMORY] = {}; // clear key lookup memory
-
         args.unshift({}, this.translations);
         this[TRANSLATIONS] = freeze(merge(...args));
 
@@ -117,19 +113,10 @@ class I18n {
      */
     find(...alternatives) {
         const key = alternatives.shift();
-        const result = this.resolve(key);
+        const result = get(this.translations, key);
         const done = typeof result !== 'undefined' || alternatives.length === 0;
 
         return done ? result : this.find(...alternatives);
-    }
-
-    /**
-     * Perform key lookup on the translation object and memoise the value
-     * @param  {String} key
-     * @return {Any}
-     */
-    resolve(key) {
-        return this[MEMORY][key] = this[MEMORY].hasOwnProperty(key) ? this[MEMORY][key] : get(this.translations, key);
     }
 
     /**
