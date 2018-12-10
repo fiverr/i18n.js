@@ -74,9 +74,10 @@ class I18n {
      * translate
      * @param  {String} key    String representing dot notation
      * @param  {Object} [data] Interpolation data
+     * @param  {String} [fallback] String to return when translation was not found
      * @return {String} translated and interpolated
      */
-    translate(key, data) {
+    translate(key, data, fallback) {
         let result = this.find(...[data, this].reduce((alternatives, item) => {
             const base = get(item, '$scope');
 
@@ -101,6 +102,9 @@ class I18n {
                 }
                 break;
             default:
+                if (fallback) {
+                    return fallback;
+                }
                 this[MISSING].forEach((fn) => fn(key, this.$scope, this.translations));
                 return I18n.getDefault(key);
         }

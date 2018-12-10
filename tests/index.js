@@ -131,4 +131,8 @@ describe('I18n', () => {
 
         expect(i18n.translate('i.am.in.scope')).to.equal('and now for something completely different');
     });
+
+    it('i18n returns fallback value', () => {
+        expect(i18n.translate('root.user.age', undefined, '18')).to.equal('18');
+    });
 });
