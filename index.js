@@ -4,6 +4,7 @@
  */
 
 const get = require('lodash.get');
+const has = require('lodash.has');
 const paraphrase = require('paraphrase');
 const merge = require('lodash.merge');
 const _global = require('./utils/glob');
@@ -121,13 +122,12 @@ class I18n {
 
     /**
      * exists
+     * The exists() method determines whether an translations contains a specified key.
      * @param  {String} key  String representing dot notation
-     * @return {Boolean} If the key exists
+     * @return {Boolean} This method returns true if the translations contains the key, and false if not.
      */
     exists(key) {
-        const alternatives = [key];
-        this.$scope && alternatives.push([this.$scope, key].join('.'));
-        return !!this.find(...alternatives);
+        return has(this.translations, key) || (this.$scope && has(this.translations, [this.$scope, key].join('.')));
     }
 
     /**

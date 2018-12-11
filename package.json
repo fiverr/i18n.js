@@ -21,6 +21,7 @@
     "deep-freeze": "0.0.1",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
+    "lodash.has": "^4.5.2",
     "paraphrase": "^1.4.3"
   },
   "devDependencies": {
