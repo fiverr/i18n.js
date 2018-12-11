@@ -127,7 +127,7 @@ class I18n {
      * @return {Boolean} This method returns true if the translations contains the key, and false if not.
      */
     exists(key) {
-        return has(this.translations, key) || (this.$scope && has(this.translations, [this.$scope, key].join('.')));
+        return has(this.translations, key) || (!!this.$scope && has(this.translations, [this.$scope, key].join('.')));
     }
 
     /**
