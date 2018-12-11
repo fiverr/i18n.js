@@ -120,6 +120,17 @@ class I18n {
     }
 
     /**
+     * exists
+     * @param  {String} key  String representing dot notation
+     * @return {Boolean} If the key exists
+     */
+    exists(key) {
+        const alternatives = [key];
+        this.$scope && alternatives.push([this.$scope, key].join('.'));
+        return !!this.find(...alternatives);
+    }
+
+    /**
      * Register callback to be called when a translation was missing.
      * Function accepts arguments: {String} missing key
      *                             {String} translation scope

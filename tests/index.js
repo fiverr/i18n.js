@@ -52,6 +52,17 @@ describe('I18n', () => {
         expect(i18n.translate('new.item.b')).to.equal('BEE!');
     });
 
+    it('key exists without scope', () => {
+        expect(i18n.exists('root.user.name')).to.true;
+    });
+
+    it('key exists in instance set scope', () => {
+        expect(i18n.exists('i.am.in.scope')).to.true;
+    });
+    it('key doesn\'t exists', () => {
+        expect(i18n.exists('root.user.age')).to.false;
+    });
+
     it('i18n translates keys', () => {
         expect(i18n.translate('root.user.name')).to.equal('Martin');
     });
