@@ -122,7 +122,7 @@ class I18n {
 
     /**
      * exists
-     * The exists() method determines whether an translations contains a specified key.
+     * The exists(key) method determines whether the translations contains a specified key.
      * @param  {String} key  String representing dot notation
      * @return {Boolean} This method returns true if the translations contains the key, and false if not.
      */
