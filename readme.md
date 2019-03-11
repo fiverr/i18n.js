@@ -27,6 +27,7 @@ const i18n = new I18n({translations});
 | `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
 | `missing` | Function | Call this function when a key is missing. Function accepts the key as first argument |
 | `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) |
+| `modify` | Function | A method to execute on the result in order to get a modified output |
 
 ```javascript
 const i18n = new I18n({
@@ -36,6 +37,8 @@ const i18n = new I18n({
 });
 ```
 
+## Later configuration
+
 ### Add more translations after instantiation
 ```javascript
 i18n.add({yet: {another: {key: 'I\'m here, too!'}}});
@@ -43,6 +46,16 @@ Use:
 i18n.translate('yet.another.key'); // I'm here, too!
 Or:
 i18n.t('yet.another.key'); // I'm here, too!
+```
+
+### Add missing keys callbacks
+```js
+i18n.onmiss((key) => sendError(new Error(`Missing translation key ${key}`)));
+```
+
+### Add result modifiers
+```js
+i18n.modify((result) => result.replace(/\s*$/, '&nbsp;'));
 ```
 
 ## Features

@@ -13,6 +13,7 @@ const jsonclone = require('./utils/jsonclone');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
+const MODIFIERS = typeof Symbol === 'function' ? Symbol() : '_modifiers';
 
 const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g);
 
@@ -22,12 +23,15 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
  * @param {Object<Object>}   options.translations JSON compliant object
  * @param {Object<String>}   [options.$scope]     Root string to be use for looking for translation keys
  * @param {Object<Function>} [options.missing]    Method to call when key is not found
+ * @param {Object<function>} [options.modify]     Result modifier
  */
 class I18n {
-    constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
+    constructor({translations = {}, $scope, missing, modify} = {}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = [];
         this.onmiss(missing);
+        this[MODIFIERS] = [];
+        modify && this[MODIFIERS].push(modify);
         this.$scope = $scope;
 
         this.translate = this.translate.bind(this);
@@ -97,7 +101,10 @@ class I18n {
                 return result;
             case 'string':
                 if (result) {
-                    return interpolate(result, data);
+                    return this[MODIFIERS].reduce(
+                        (result, fn) => fn(result),
+                        interpolate(result, data)
+                    );
                 }
                 break;
             default:
@@ -132,6 +139,20 @@ class I18n {
      */
     onmiss(callback) {
         typeof callback === 'function' && this[MISSING].push(callback);
+        return this;
+    }
+
+    /**
+     * Register result modifier
+     * Function accepts arguments: {String} translation result
+     * @param  {Function} callback
+     * @return {self}
+     *
+     * @example
+     * i18n.modify((result) => result.replace(/\s*$/, '&nbsp;'))
+     */
+    modify(fn) {
+        this[MODIFIERS].push(fn);
         return this;
     }
 
