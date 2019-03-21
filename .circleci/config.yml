@@ -32,7 +32,7 @@ jobs:
           command: npm t
       - run:
           name: Check syntax
-          command: npm run lint
+          command: npm run lint -- --plugin log-filenames
   publish:
     <<: *defaults
     docker:
