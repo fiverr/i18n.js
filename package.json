@@ -21,14 +21,13 @@
     "deep-freeze": "0.0.1",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
-    "paraphrase": "^1.4.3"
+    "paraphrase": "^1.7.0"
   },
   "devDependencies": {
     "@fiverr/eslint-config-fiverr": "^3.0.0",
     "chai": "^4.2.0",
-    "eslint": "^5.8.0",
-    "eslint-plugin-log-filenames": "^1.0.1",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-log": "^1.1.0",
     "import-fresh": "^3.0.0",
     "mocha": "^6.0.0"
   }

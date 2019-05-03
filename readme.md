@@ -1,23 +1,11 @@
-# i18n
+# ![](https://user-images.githubusercontent.com/516342/57133825-b03b7580-6dac-11e9-803b-0564d12ee13d.png) i18n [![](https://img.shields.io/npm/v/@fiverr/i18n.svg)](https://www.npmjs.com/package/@fiverr/i18n) [![](https://img.shields.io/circleci/project/github/fiverr/i18n.js.svg)](https://circleci.com/gh/fiverr/i18n.js) ![](https://img.shields.io/node/v/@fiverr/i18n.svg)
 
 Isomorphic translation engine. Mimics Rails' i18n interface.
 
-[![npm](https://img.shields.io/npm/v/@fiverr/i18n.svg)](https://www.npmjs.com/package/@fiverr/i18n)
-[![CircleCI](https://img.shields.io/circleci/project/github/fiverr/i18n.js.svg)](https://circleci.com/gh/fiverr/i18n.js)
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/fiverr/i18n.js.svg)](https://greenkeeper.io/)
-[![bitHound Overall Score](https://www.bithound.io/github/fiverr/i18n.js/badges/score.svg)](https://www.bithound.io/github/fiverr/i18n.js)
-[![bitHound Dependencies](https://www.bithound.io/github/fiverr/i18n.js/badges/dependencies.svg)](https://www.bithound.io/github/fiverr/i18n.js/master/dependencies/npm)
-
-
-## [Install fom NPM](https://www.npmjs.com/package/@fiverr/i18n)
-```sh
-npm i @fiverr/i18n -S
-```
-## Use
-```javascript
+## Usage
+```js
 const I18n = require('@fiverr/i18n');
-const translations = require('./my.translations.object');
+const translations = require('./translations.json');
 
 const i18n = new I18n({translations});
 ```
@@ -28,7 +16,7 @@ const i18n = new I18n({translations});
 | `missing` | Function | Call this function when a key is missing. Function accepts the key as first argument |
 | `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) |
 
-```javascript
+```js
 const i18n = new I18n({
     translations: {...},
     missing: key => logMissingKeyEvent({key: `missing_translation.${key.replace(/\W/g, '_')}`}),
@@ -37,7 +25,7 @@ const i18n = new I18n({
 ```
 
 ### Add more translations after instantiation
-```javascript
+```js
 i18n.add({yet: {another: {key: 'I\'m here, too!'}}});
 Use:
 i18n.translate('yet.another.key'); // I'm here, too!
@@ -48,7 +36,7 @@ i18n.t('yet.another.key'); // I'm here, too!
 ## Features
 
 ### Interpolate with data
-```javascript
+```js
 const i18n = new I18n({
     translations: {
         my: { string: 'a dynamic %{thing} in a static string' }
@@ -58,7 +46,7 @@ i18n.t('my.string', {thing: 'value'}); // a dynamic value in a static string
 ```
 
 ### One/other
-```javascript
+```js
 const i18n = new I18n({
     translations: {
         it_will_take_me_days: {
@@ -78,7 +66,7 @@ Priority:
 2. Found result with passed in scope (when applicable)
 3. Found result with instance set scope (when applicable)
 
-```javascript
+```js
 // Global scope setup
 const i18n = new I18n({
     translations: {
@@ -105,7 +93,7 @@ This is a good option for shorthand in enclosed parts of the application.
 The translation store is shared so the parent can find the keys if it prefixes the namespace, and the child doesn't need to.
 
 The child can also find "global" translations (ones that are outside it's namespace)
-```javascript
+```js
 const usersI18n = i18n.spawn('users.get');
 
 // Add translations under the scope
@@ -118,25 +106,25 @@ i18n.t('users.get.introduction', {username: 'Martin'}); // Hi, my name is Martin
 
 ### Instance
 Exposes an empty instance of i18n
-```javascript
+```js
 const i18n = require('@fiverr/i18n/instance');
 
 i18n.add({...});
 ```
 
 Made especially for use as a webpack external
-```javascript
+```js
 externals: {
   '@fiverr/i18n/instance': 'i18n'
 }
 ```
 
 > Name can alternate:
-> ```javascript
+> ```js
 > import phraser from '@fiverr/i18n/instance';
 > ```
 >
-> ```javascript
+> ```js
 > externals: {
 >   '@fiverr/i18n/instance': 'phraser'
 > }
@@ -145,7 +133,7 @@ externals: {
 
 ### Singleton (i18n)
 Make sure you only have one instance of I18n in your global scope
-```javascript
+```js
 const i18n = I18n.singleton;
 
 // Optional:
@@ -154,12 +142,12 @@ i18n.onmiss((key, scope) => console.error(`Missing key "${key}" ${scope ? `In sc
 i18n.add({...});
 ```
 Shortcut:
-```javascript
+```js
 const i18n = require('@fiverr/i18n/singleton');
 ```
 Or simply
 
-```javascript
+```js
 require('@fiverr/i18n/singleton');
 
 // i18n is defined globally
