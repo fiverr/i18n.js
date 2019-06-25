@@ -1,6 +1,6 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Translation helper",
   "author": "Fiverr dev team",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "lint": "eslint -c .eslintrc '**/*.js' '*.js'"
   },
   "dependencies": {
-    "@recursive/assign": "^1.2.3",
+    "@recursive/assign": "^1.2.4",
     "deep-freeze": "0.0.1",
     "lodash.get": "^4.4.2",
     "paraphrase": "^1.7.0"
@@ -26,8 +26,8 @@
   "devDependencies": {
     "@fiverr/eslint-config-fiverr": "^3.0.0",
     "chai": "^4.2.0",
-    "eslint": "^6.0.0",
-    "eslint-plugin-log": "^1.1.0",
+    "eslint": "^6.0.1",
+    "eslint-plugin-log": "^1.2.2",
     "import-fresh": "^3.0.0",
     "mocha": "^6.0.0"
   }
