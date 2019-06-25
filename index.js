@@ -77,8 +77,14 @@ class I18n {
      * @return {String} translated and interpolated
      */
     translate(key, data) {
+
+        // Collect scopes
         const scopes = [data || {}, this].map(({$scope}) => $scope).filter(Boolean);
+
+        // Create key alternatives with prefixes
         const alternatives = scopes.map(scope => [scope, key].join('.'))
+
+        // Find the first match
         let result = this.find(...alternatives, key);
 
         // Handle one,other translation structure
