@@ -82,7 +82,7 @@ class I18n {
         const scopes = [data || {}, this].map(({$scope}) => $scope).filter(Boolean);
 
         // Create key alternatives with prefixes
-        const alternatives = scopes.map(scope => [scope, key].join('.'))
+        const alternatives = scopes.map((scope) => [scope, key].join('.'));
 
         // Find the first match
         let result = this.find(...alternatives, key);
