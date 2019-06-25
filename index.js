@@ -77,15 +77,9 @@ class I18n {
      * @return {String} translated and interpolated
      */
     translate(key, data) {
-        let result = this.find(...[data, this].reduce((alternatives, item) => {
-            const base = get(item, '$scope');
-
-            if (base !== undefined) {
-                alternatives.push([base, key].join('.'));
-            }
-
-            return alternatives;
-        }, [key]));
+        const scopes = [data || {}, this].map(({$scope}) => $scope).filter(Boolean);
+        const alternatives = scopes.map(scope => [scope, key].join('.'))
+        let result = this.find(...alternatives, key);
 
         // Handle one,other translation structure
         result = getOneOther(result, data);
