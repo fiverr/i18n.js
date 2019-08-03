@@ -2,6 +2,7 @@ const {assert, expect} = require('chai');
 
 const I18n = require('../');
 const translations = require('./translations-stub.json');
+
 const $scope = 'controller_name.action_name';
 
 describe('I18n', () => {

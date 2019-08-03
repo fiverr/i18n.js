@@ -6,8 +6,8 @@
 const get = require('lodash.get');
 const paraphrase = require('paraphrase');
 const assign = require('@recursive/assign');
-const _global = require('./utils/glob');
 const freeze = require('deep-freeze');
+const _global = require('./utils/glob');
 const getOneOther = require('./utils/get-one-other');
 const jsonclone = require('./utils/jsonclone');
 
