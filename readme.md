@@ -14,7 +14,7 @@ const i18n = new I18n({translations});
 | ------ | ---- | ----------- |
 | `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
 | `missing` | Function | Call this function when a key is missing. Function accepts the key as first argument |
-| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) |
+| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root** |
 
 ```js
 const i18n = new I18n({
@@ -62,29 +62,28 @@ i18n.t('it_will_take_me_days', {count: 'a lot of'}); // It'll take me a lot of d
 
 ### Instance with a scope
 Priority:
-1. Found result w/o scope
-2. Found result with passed in scope (when applicable)
-3. Found result with instance set scope (when applicable)
+1. Found result with passed in scope (when applicable)
+2. Found result with instance set scope (when applicable)
+3. Found result w/o scope
 
 ```js
 // Global scope setup
 const i18n = new I18n({
     translations: {
-        users: { get: { title: '%{username}\'s page' } }
-    },
-    $scope: 'users.get'
-});
-// Use:
-i18n.t('title', {username: 'Arthur'}); // Arthur's page
-
-// Single use scope (passed in with data)
-const i18n = new I18n({
-    translations: {
-        users: { get: { title: '%{username}\'s page' } }
+        key: 'Top',
+        child: {
+            key: 'Child'
+        },
+        something: {
+            key: 'Something'
+        }
     }
 });
-// Use:
-i18n.t('title', {username: 'Arthur', $scope: 'users.get'}); // Arthur's page
+const child = i18n.spawn('child');
+
+i18n.t('key'); // Top
+child.t('key'); // Child
+child.t('key', $scope: 'something'); // Something
 ```
 
 ### Scoped child instance

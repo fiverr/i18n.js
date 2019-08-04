@@ -44,4 +44,17 @@ describe('child instances', () => {
         expect(i18n.t('title')).to.equal('My App');
         expect(child.t('title')).to.equal('My Page');
     });
+
+    it('Child should check its own scope before parent', () => {
+        const i18n = new I18n({translations: {
+            key: 'Top',
+            child: { key: 'Child' },
+            something: { key: 'Something' }
+        }});
+        const child = i18n.spawn('child');
+
+        expect(i18n.t('key', {$scope: 'something'})).to.equal('Something');
+        expect(child.t('key')).to.equal('Child');
+        expect(child.t('key', {$scope: 'something'})).to.equal('Something');
+    });
 });

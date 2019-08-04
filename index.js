@@ -6,8 +6,8 @@
 const get = require('lodash.get');
 const paraphrase = require('paraphrase');
 const assign = require('@recursive/assign');
-const _global = require('./utils/glob');
 const freeze = require('deep-freeze');
+const _global = require('./utils/glob');
 const getOneOther = require('./utils/get-one-other');
 const jsonclone = require('./utils/jsonclone');
 
@@ -77,15 +77,15 @@ class I18n {
      * @return {String} translated and interpolated
      */
     translate(key, data) {
-        let result = this.find(...[data, this].reduce((alternatives, item) => {
-            const base = get(item, '$scope');
 
-            if (base !== undefined) {
-                alternatives.push([base, key].join('.'));
-            }
+        // Collect scopes
+        const scopes = [data || {}, this].map(({$scope}) => $scope).filter(Boolean);
 
-            return alternatives;
-        }, [key]));
+        // Create key alternatives with prefixes
+        const alternatives = scopes.map((scope) => [scope, key].join('.'));
+
+        // Find the first match
+        let result = this.find(...alternatives, key);
 
         // Handle one,other translation structure
         result = getOneOther(result, data);

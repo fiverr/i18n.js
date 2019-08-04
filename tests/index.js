@@ -2,6 +2,7 @@ const {assert, expect} = require('chai');
 
 const I18n = require('../');
 const translations = require('./translations-stub.json');
+
 const $scope = 'controller_name.action_name';
 
 describe('I18n', () => {
@@ -117,7 +118,7 @@ describe('I18n', () => {
         })).to.equal('I am in a different scope');
     });
 
-    it('prefers non contextual string to contextual (found in scope)', () => {
+    it('prefers contextual string to non contextual (found in scope)', () => {
         const more = {
             i: {
                 am: {
@@ -129,6 +130,6 @@ describe('I18n', () => {
         };
         i18n.add(more);
 
-        expect(i18n.translate('i.am.in.scope')).to.equal('and now for something completely different');
+        expect(i18n.translate('i.am.in.scope')).to.equal('I am in scope');
     });
 });

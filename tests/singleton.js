@@ -1,5 +1,6 @@
 const {expect} = require('chai');
 const importFresh = require('import-fresh');
+
 const _global = global;
 
 describe('Singleton', () => {
