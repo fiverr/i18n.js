@@ -24,6 +24,16 @@ const i18n = new I18n({
 });
 ```
 
+### Translate
+```js
+i18n.t('my.key'); // I'm a sentence
+```
+
+### Find alternatives
+```js
+i18n.t(['my.missing.key', 'my.key']); // I'm a sentence
+```
+
 ### Add more translations after instantiation
 ```js
 i18n.add({yet: {another: {key: 'I\'m here, too!'}}});

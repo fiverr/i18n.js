@@ -38,8 +38,8 @@ class I18n {
      * @param  {String} key
      * @return {String} A default string for a missing key
      */
-    static getDefault(key = '') {
-        return key.split('.').pop().replace(/_/g, ' ');
+    static getDefault(key) {
+        return (key || '').split('.').pop().replace(/_/g, ' ');
     }
 
     /**
@@ -78,14 +78,17 @@ class I18n {
      */
     translate(key, data) {
 
-        // Collect scopes
-        const scopes = [data || {}, this].map(({$scope}) => $scope).filter(Boolean);
+        const keys = Array.isArray(key) ? key : [ key ];
 
         // Create key alternatives with prefixes
-        const alternatives = scopes.map((scope) => [scope, key].join('.'));
+        const alternatives = [].concat(
+            ...keys.map(
+                (key) => this.alternatives(key, data)
+            )
+        );
 
         // Find the first match
-        let result = this.find(...alternatives, key);
+        let result = this.find(...alternatives);
 
         // Handle one,other translation structure
         result = getOneOther(result, data);
@@ -101,9 +104,27 @@ class I18n {
                 }
                 break;
             default:
-                this[MISSING].forEach((fn) => fn(key, this.$scope, this.translations));
-                return I18n.getDefault(key);
+                this[MISSING].forEach((fn) => fn(`${key}`, this.$scope, this.translations));
+                return I18n.getDefault(...keys);
         }
+    }
+
+    /**
+     * Create key alternatives with prefixes according to instance scopes
+     * @param  {string}   key
+     * @param  {object}   data Object optionally containing '$scope' parameter
+     * @return {string[]}
+     */
+    alternatives(key, data) {
+        return [data || {}, this].map(
+            ({$scope}) => $scope
+        ).filter(
+            Boolean
+        ).map(
+            (scope) => [scope, key].join('.')
+        ).concat(
+            key
+        );
     }
 
     /**
