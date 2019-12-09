@@ -83,7 +83,7 @@ const child = i18n.spawn('child');
 
 i18n.t('key'); // Top
 child.t('key'); // Child
-child.t('key', $scope: 'something'); // Something
+child.t('key', { $scope: 'something' }); // Something
 ```
 
 ### Scoped child instance
