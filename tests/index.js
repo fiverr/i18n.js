@@ -57,6 +57,13 @@ describe('I18n', () => {
         expect(i18n.translate('root.user.name')).to.equal('Martin');
     });
 
+    it('i18n uses keys list to find an existing key', () => {
+        expect(i18n.translate([
+            'root_user_name',
+            'root.user.name'
+        ])).to.equal('Martin');
+    });
+
     it('translate function is bound to instance', () => {
         const translate = i18n.translate;
 
@@ -116,6 +123,18 @@ describe('I18n', () => {
         expect(i18n.translate('i.am.in.scope', {
             $scope: 'another_controller_name.action_name'
         })).to.equal('I am in a different scope');
+    });
+
+    it('keys arrays performs lookup in scope', () => {
+        expect(i18n.translate(
+            [
+                'i.am.not.found',
+                'i.am.in.scope'
+            ],
+            {
+                $scope: 'another_controller_name.action_name'
+            }
+        )).to.equal('I am in a different scope');
     });
 
     it('prefers contextual string to non contextual (found in scope)', () => {
