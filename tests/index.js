@@ -100,7 +100,6 @@ describe('I18n', () => {
         expect(i18n.translate('root.is.a.number')).to.be.a('number');
         expect(i18n.translate('root.is.a.boolean')).to.be.a('boolean');
         expect(i18n.translate('root.is.a.object')).to.be.an('object');
-        expect(i18n.translate('root.is.a.null')).to.be.a('null');
     });
 
     it('add translations', () => {

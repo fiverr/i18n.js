@@ -13,13 +13,15 @@ const i18n = new I18n({translations});
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
-| `missing` | Function | Call this function when a key is missing. Function accepts the key as first argument |
+| `missing` | Function | Call this function when a key is missing. Function accepts arguments: key, scope, translations_object |
+| `empty` | Function | Call this function when a value is empty. Function accepts arguments: key, value, scope, translations_object |
 | `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root** |
 
 ```js
 const i18n = new I18n({
     translations: {...},
     missing: key => logMissingKeyEvent({key: `missing_translation.${key.replace(/\W/g, '_')}`}),
+    empty: key => logEmptyValueEvent({key: `empty_translation.${key.replace(/\W/g, '_')}`}),
     $scope: 'my_app.en'
 });
 ```
@@ -32,6 +34,26 @@ i18n.t('my.key'); // I'm a sentence
 ### Find alternatives
 ```js
 i18n.t(['my.missing.key', 'my.key']); // I'm a sentence
+```
+
+### Handle missing
+By default, missing keys or empty values return the last part of the key
+```js
+i18n.t('this.is.a.missing_key'); // missing key
+```
+
+But returning a truthy value from 'missing' and 'empty' callbacks will allow a custom fallback
+```js
+const i18n = new I18n({
+    translations: {...},
+    empty: (key, value, scope) => {
+        if (scope.startsWith('en-US')) {
+            return; // default fallback
+        }
+        return i18n.t(key, { $scope: 'en-US' }); // Try English
+    },
+    $scope: 'en-US'
+});
 ```
 
 ### Add more translations after instantiation
@@ -148,6 +170,7 @@ const i18n = I18n.singleton;
 // Optional:
 i18n.$scope = 'my.scope';
 i18n.onmiss((key, scope) => console.error(`Missing key "${key}" ${scope ? `In scope: "${scope}"`}`));
+i18n.onempty((key, value, scope) => console.warn(`Empty value "${value}" for key "${key}" ${scope ? `In scope: "${scope}"`}`));
 i18n.add({...});
 ```
 Shortcut:

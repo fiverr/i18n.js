@@ -13,21 +13,27 @@ const jsonclone = require('./utils/jsonclone');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
+const EMPTY = typeof Symbol === 'function' ? Symbol() : '_empty';
+const EMPTY_VALUES = [null, ''];
+const ACCEPTABLE_RETURN_TYPES = ['object', 'number', 'boolean', 'string'];
 
 const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g);
 
 /**
  * @class I18n
  * @classdesc an object capable of translating keys and interpolate using given data object
- * @param {Object<Object>}   options.translations JSON compliant object
- * @param {Object<String>}   [options.$scope]     Root string to be use for looking for translation keys
- * @param {Object<Function>} [options.missing]    Method to call when key is not found
+ * @param {Object}   options.translations JSON compliant object
+ * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
+ * @param {Function} [options.missing]    Method to call when key is not found
+ * @param {Function} [options.empty]      Method to call when value is empty
  */
 class I18n {
-    constructor({translations, $scope, missing} = {translations: {}, $scope: undefined, missing: undefined}) {
+    constructor({translations = {}, $scope, missing, empty} = {translations: {}}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
-        this[MISSING] = [];
+        this[MISSING] = () => undefined;
+        this[EMPTY] = () => undefined;
         this.onmiss(missing);
+        this.onempty(empty);
         this.$scope = $scope;
 
         this.translate = this.translate.bind(this);
@@ -93,20 +99,20 @@ class I18n {
         // Handle one,other translation structure
         result = getOneOther(result, data);
 
-        switch (typeof result) {
-            case 'object':
-            case 'number':
-            case 'boolean':
-                return result;
-            case 'string':
-                if (result) {
-                    return interpolate(result, data);
-                }
-                break;
-            default:
-                this[MISSING].forEach((fn) => fn(`${key}`, this.$scope, this.translations));
-                return I18n.getDefault(...keys);
+        if (EMPTY_VALUES.includes(result)) {
+            return this[EMPTY](
+                `${key}`, result, this.$scope, this.translations
+            ) || I18n.getDefault(...keys);
         }
+
+        const type = typeof result;
+        result = type === 'string' ? interpolate(result, data) : result;
+
+        return ACCEPTABLE_RETURN_TYPES.includes(type)
+            ? result
+            : this[MISSING](
+                `${key}`, this.$scope, this.translations
+            ) || I18n.getDefault(...keys);
     }
 
     /**
@@ -149,10 +155,30 @@ class I18n {
      * @return {self}
      *
      * @example
-     * i18n.onmiss((key) => logMissingKeyEvent({key: key.replace(/\W/g, '_'), })
+     * i18n.onmiss((key) => logMissingKeyEvent({key})
      */
     onmiss(callback) {
-        typeof callback === 'function' && this[MISSING].push(callback);
+        if (typeof callback === 'function') {
+            this[MISSING] = callback;
+        }
+        return this;
+    }
+
+    /**
+     * Register callback to be called when a translation value is empty.
+     * Function accepts arguments: {String} missing key
+     *                             {String} translation scope
+     *                             {Object} The entire translation dictionary
+     * @param  {Function} callback
+     * @return {self}
+     *
+     * @example
+     * i18n.onempty((key, value) => logEmptyValueEvent({key, value})
+     */
+    onempty(callback) {
+        if (typeof callback === 'function') {
+            this[EMPTY] = callback;
+        }
         return this;
     }
 
