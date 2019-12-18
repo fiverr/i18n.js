@@ -29,8 +29,8 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
 class I18n {
     constructor({translations, $scope, missing, empty} = {translations: {}}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
-        this[MISSING] = [];
-        this[EMPTY] = [];
+        this[MISSING] = () => undefined;
+        this[EMPTY] = () => undefined;
         this.onmiss(missing);
         this.onempty(empty);
         this.$scope = $scope;
@@ -98,9 +98,9 @@ class I18n {
         // Handle one,other translation structure
         result = getOneOther(result, data);
 
-        if (EMPTY_VALUES.includes(result) && typeof this[EMPTY] === 'function') {
+        if (EMPTY_VALUES.includes(result)) {
             return this[EMPTY](
-                `${key}`, `${result}`, this.$scope, this.translations
+                `${key}`, result, this.$scope, this.translations
             ) || I18n.getDefault(...keys);
         }
 
@@ -115,12 +115,9 @@ class I18n {
                 }
                 break;
             default:
-                if (typeof this[MISSING] === 'function') {
-                    return this[MISSING](
-                        `${key}`, this.$scope, this.translations
-                    ) || I18n.getDefault(...keys);
-                }
-                return I18n.getDefault(...keys);
+                return this[MISSING](
+                    `${key}`, this.$scope, this.translations
+                ) || I18n.getDefault(...keys);
         }
     }
 

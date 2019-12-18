@@ -61,6 +61,20 @@ describe('missing keys report', () => {
         expect(value).to.equal('Fallback');
     });
 
+    it('uses last part of the key on empty when no return value was given', () => {
+        const i18n = new I18n({
+            $scope: 'some.scope',
+            translations: {
+                base: {
+                    some_key: ''
+                }
+            }
+        });
+
+        const value = i18n.translate('base.some_key');
+        expect(value).to.equal('some key');
+    });
+
     it('uses onempty return value as fallback', () => {
         const i18n = new I18n({
             $scope: 'some.scope',
@@ -93,7 +107,7 @@ describe('missing keys report', () => {
                     reported = true;
                     expect(scope).to.equal('some.scope');
                     expect(key).to.equal('base.some_key');
-                    expect(value).to.equal(`${item}`);
+                    expect(value).to.equal(item);
                     expect(translations).to.be.an('object');
                 }
             });
