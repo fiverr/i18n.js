@@ -41,7 +41,7 @@ describe('missing keys report', () => {
         let reported = false;
         const i18n = new I18n({
             $scope: 'some.scope',
-            missing: (key, scope, translations) => {
+            missing: () => {
                 reported = true;
             }
         });
@@ -52,22 +52,16 @@ describe('missing keys report', () => {
     });
 
     it('uses onmiss return value as fallback', () => {
-        let reported = false;
         const i18n = new I18n({
             $scope: 'some.scope',
-            missing: (key, scope, translations) => {
-                reported = true;
-                return 'Fallback';
-            }
+            missing: () => 'Fallback'
         });
 
         const value = i18n.translate('some.thing.is_missing');
         expect(value).to.equal('Fallback');
-        expect(reported).to.be.true;
     });
 
     it('uses onempty return value as fallback', () => {
-        let reported = false;
         const i18n = new I18n({
             $scope: 'some.scope',
             translations: {
@@ -75,15 +69,11 @@ describe('missing keys report', () => {
                     some_key: ''
                 }
             },
-            empty: (key, scope, translations) => {
-                reported = true;
-                return 'Fallback';
-            }
+            empty: () => 'Fallback'
         });
 
         const value = i18n.translate('base.some_key');
         expect(value).to.equal('Fallback');
-        expect(reported).to.be.true;
     });
 
     [
