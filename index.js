@@ -22,13 +22,13 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
 /**
  * @class I18n
  * @classdesc an object capable of translating keys and interpolate using given data object
- * @param {Object<Object>}   options.translations JSON compliant object
- * @param {Object<String>}   [options.$scope]     Root string to be use for looking for translation keys
- * @param {Object<Function>} [options.missing]    Method to call when key is not found
- * @param {Object<Function>} [options.empty]      Method to call when value is empty
+ * @param {Object}   options.translations JSON compliant object
+ * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
+ * @param {Function} [options.missing]    Method to call when key is not found
+ * @param {Function} [options.empty]      Method to call when value is empty
  */
 class I18n {
-    constructor({translations, $scope, missing, empty} = {translations: {}}) {
+    constructor({translations = {}, $scope, missing, empty} = {translations: {}}) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = () => undefined;
         this[EMPTY] = () => undefined;
