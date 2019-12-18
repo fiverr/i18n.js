@@ -36,6 +36,26 @@ i18n.t('my.key'); // I'm a sentence
 i18n.t(['my.missing.key', 'my.key']); // I'm a sentence
 ```
 
+### Handle missing
+By default, missing keys or empty values return the last part of the key
+```js
+i18n.t('this.is.a.missing_key'); // missing key
+```
+
+But returning a truthy value from 'missing' and 'empty' callbacks will allow a custom fallback
+```js
+const i18n = new I18n({
+    translations: {...},
+    empty: (key, value, scope) => {
+        if (scope.startsWith('en-US')) {
+            return; // default fallback
+        }
+        return i18n.t(key, { $scope: 'en-US' }); // Try English
+    },
+    $scope: 'en-US'
+});
+```
+
 ### Add more translations after instantiation
 ```js
 i18n.add({yet: {another: {key: 'I\'m here, too!'}}});

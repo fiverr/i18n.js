@@ -14,7 +14,7 @@ const jsonclone = require('./utils/jsonclone');
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 const EMPTY = typeof Symbol === 'function' ? Symbol() : '_empty';
-const EMPTY_VALUES = [null, undefined, ''];
+const EMPTY_VALUES = [null, ''];
 
 const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g);
 
@@ -98,8 +98,10 @@ class I18n {
         // Handle one,other translation structure
         result = getOneOther(result, data);
 
-        if (EMPTY_VALUES.includes(result)) {
-            this[EMPTY].forEach((fn) => fn(`${key}`, `${result}`, this.$scope, this.translations));
+        if (EMPTY_VALUES.includes(result) && typeof this[EMPTY] === 'function') {
+            return this[EMPTY](
+                `${key}`, `${result}`, this.$scope, this.translations
+            ) || I18n.getDefault(...keys);
         }
 
         switch (typeof result) {
@@ -113,7 +115,11 @@ class I18n {
                 }
                 break;
             default:
-                this[MISSING].forEach((fn) => fn(`${key}`, this.$scope, this.translations));
+                if (typeof this[MISSING] === 'function') {
+                    return this[MISSING](
+                        `${key}`, this.$scope, this.translations
+                    ) || I18n.getDefault(...keys);
+                }
                 return I18n.getDefault(...keys);
         }
     }
@@ -161,7 +167,9 @@ class I18n {
      * i18n.onmiss((key) => logMissingKeyEvent({key})
      */
     onmiss(callback) {
-        typeof callback === 'function' && this[MISSING].push(callback);
+        if (typeof callback === 'function') {
+            this[MISSING] = callback;
+        }
         return this;
     }
 
@@ -177,7 +185,9 @@ class I18n {
      * i18n.onempty((key, value) => logEmptyValueEvent({key, value})
      */
     onempty(callback) {
-        typeof callback === 'function' && this[EMPTY].push(callback);
+        if (typeof callback === 'function') {
+            this[EMPTY] = callback;
+        }
         return this;
     }
 
