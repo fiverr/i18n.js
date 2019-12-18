@@ -13,13 +13,15 @@ const i18n = new I18n({translations});
 | Option | Type | Description |
 | ------ | ---- | ----------- |
 | `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
-| `missing` | Function | Call this function when a key is missing. Function accepts the key as first argument |
+| `missing` | Function | Call this function when a key is missing. Function accepts arguments: key, scope, translations_object |
+| `empty` | Function | Call this function when a value is empty. Function accepts arguments: key, value, scope, translations_object |
 | `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root** |
 
 ```js
 const i18n = new I18n({
     translations: {...},
     missing: key => logMissingKeyEvent({key: `missing_translation.${key.replace(/\W/g, '_')}`}),
+    empty: key => logEmptyValueEvent({key: `empty_translation.${key.replace(/\W/g, '_')}`}),
     $scope: 'my_app.en'
 });
 ```
@@ -148,6 +150,7 @@ const i18n = I18n.singleton;
 // Optional:
 i18n.$scope = 'my.scope';
 i18n.onmiss((key, scope) => console.error(`Missing key "${key}" ${scope ? `In scope: "${scope}"`}`));
+i18n.onempty((key, value, scope) => console.warn(`Empty value "${value}" for key "${key}" ${scope ? `In scope: "${scope}"`}`));
 i18n.add({...});
 ```
 Shortcut:
