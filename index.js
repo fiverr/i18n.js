@@ -15,6 +15,7 @@ const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 const EMPTY = typeof Symbol === 'function' ? Symbol() : '_empty';
 const EMPTY_VALUES = [null, ''];
+const ACCEPTABLE_RETURN_TYPES = ['object', 'number', 'boolean', 'string'];
 
 const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g);
 
@@ -104,21 +105,14 @@ class I18n {
             ) || I18n.getDefault(...keys);
         }
 
-        switch (typeof result) {
-            case 'object':
-            case 'number':
-            case 'boolean':
-                return result;
-            case 'string':
-                if (result) {
-                    return interpolate(result, data);
-                }
-                break;
-            default:
-                return this[MISSING](
-                    `${key}`, this.$scope, this.translations
-                ) || I18n.getDefault(...keys);
-        }
+        const type = typeof result;
+        result = type === 'string' ? interpolate(result, data) : result;
+
+        return ACCEPTABLE_RETURN_TYPES.includes(type)
+            ? result
+            :  this[MISSING](
+                `${key}`, this.$scope, this.translations
+            ) || I18n.getDefault(...keys);
     }
 
     /**
