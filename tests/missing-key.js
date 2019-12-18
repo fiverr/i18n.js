@@ -37,27 +37,33 @@ describe('missing keys report', () => {
         expect(reported).to.be.true;
     });
 
-    it('reports empty value for undefined', () => {
-        let reported = false;
-        const i18n = new I18n({
-            $scope: 'some.scope',
-            translations: {
-                base: {
-                    some_key: ''
+    [
+        '',
+        undefined,
+        null
+    ].forEach(
+        item => it(`reports empty value for ${item}`, () => {
+            let reported = false;
+            const i18n = new I18n({
+                $scope: 'some.scope',
+                translations: {
+                    base: {
+                        some_key: item
+                    }
+                },
+                empty: (key, value, scope, translations) => {
+                    reported = true;
+                    expect(scope).to.equal('some.scope');
+                    expect(key).to.equal('base.some_key');
+                    expect(value).to.equal(`${item}`);
+                    expect(translations).to.be.an('object');
                 }
-            },
-            empty: (key, value, scope, translations) => {
-                reported = true;
-                expect(scope).to.equal('some.scope');
-                expect(key).to.equal('base.some_key');
-                expect(value).to.equal('');
-                expect(translations).to.be.an('object');
-            }
-        });
+            });
 
-        i18n.translate('base.some_key');
-        expect(reported).to.be.true;
-    });
+            i18n.translate('base.some_key');
+            expect(reported).to.be.true;
+        })
+    );
 
     it('reports missing keys for arrays', () => {
         let reported = false;
