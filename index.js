@@ -110,7 +110,7 @@ class I18n {
 
         return ACCEPTABLE_RETURN_TYPES.includes(type)
             ? result
-            :  this[MISSING](
+            : this[MISSING](
                 `${key}`, this.$scope, this.translations
             ) || I18n.getDefault(...keys);
     }
