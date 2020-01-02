@@ -150,4 +150,38 @@ describe('I18n', () => {
 
         expect(i18n.translate('i.am.in.scope')).to.equal('I am in scope');
     });
+
+    it('searches for available keys', () => {
+        const i18n = new I18n();
+
+        i18n.add({
+            lookup: { key: 'balue', biscuit: '' }
+        });
+
+        [
+            [ 'lookup.key' ],
+            [ 'lookup.biscuit' ],
+            [ ['lookup.pie', 'lookup.key'] ],
+            [ 'key', { $scope: 'lookup' } ],
+            [ [ 'pie', 'key' ], { $scope: 'lookup' } ]
+        ].forEach(
+            (args) => expect(i18n.has(...args), args).to.be.true
+        );
+
+        [
+            [ 'lookup.pie' ],
+            [ ['lookup.pie', 'lookup.cake'] ],
+            [ 'key' ],
+            [],
+            [ null ]
+        ].forEach(
+            (args) => expect(i18n.has(...args), args).to.be.false
+        );
+
+        const child = i18n.spawn('lookup');
+
+        expect(child.has('key'), 'child.key').to.be.true;
+        expect(child.has('biscuit'), 'child.biscuit').to.be.true;
+        expect(child.has('pie'), 'child.pie').to.be.false;
+    });
 });

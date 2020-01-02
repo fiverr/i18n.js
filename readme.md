@@ -185,3 +185,12 @@ require('@fiverr/i18n/singleton');
 // i18n is defined globally
 ```
 
+### Helper functions
+Check if a key is available (including empty strings)
+#### has
+```js
+i18n.has('key');
+i18n.has(['key', 'other_key']);
+i18n.has('namespace.key');
+i18n.has('key', { $scope: 'namespace' });
+```
