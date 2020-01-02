@@ -116,6 +116,22 @@ class I18n {
     }
 
     /**
+     * Check if a translation key exists
+     * @param  {string|string[]} keys
+     * @param  {Object}          data
+     * @return {Boolean}      [description]
+     */
+    has(keys, data) {
+        keys = Array.isArray(keys) ? keys : [ keys ];
+        const alternatives = keys.reduce(
+            (accumulator, key) => accumulator.concat(this.alternatives(key, data)),
+            []
+        );
+
+        return typeof this.find(...alternatives) !== 'undefined';
+    }
+
+    /**
      * Create key alternatives with prefixes according to instance scopes
      * @param  {string}   key
      * @param  {object}   data Object optionally containing '$scope' parameter
