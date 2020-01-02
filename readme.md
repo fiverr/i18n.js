@@ -187,7 +187,7 @@ require('@fiverr/i18n/singleton');
 
 ### Helper functions
 Check if a key is available (including empty strings)
-####
+#### has
 ```js
 i18n.has('key');
 i18n.has(['key', 'other_key']);
