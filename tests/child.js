@@ -57,4 +57,26 @@ describe('child instances', () => {
         expect(child.t('key')).to.equal('Child');
         expect(child.t('key', {$scope: 'something'})).to.equal('Something');
     });
+
+    it('Child calls parent onmiss functionallity', () => {
+        const i18n = new I18n({translations});
+        let miss = 0;
+        i18n.onmiss(() => miss++);
+        const child = i18n.spawn('child');
+        child.t('missing_translation');
+        expect(miss).to.equal(1);
+    });
+
+    it('Child overrides parent onmiss functionallity', () => {
+        const i18n = new I18n({translations});
+        let miss = 0;
+        let childMiss = 0;
+        i18n.onmiss(() => miss++);
+        const child = i18n.spawn('child');
+        child.onmiss(() => childMiss++)
+
+        child.t('missing_translation');
+        expect(miss).to.equal(0);
+        expect(childMiss).to.equal(1);
+    });
 });
