@@ -73,7 +73,7 @@ describe('child instances', () => {
         let childMiss = 0;
         i18n.onmiss(() => miss++);
         const child = i18n.spawn('child');
-        child.onmiss(() => childMiss++)
+        child.onmiss(() => childMiss++);
 
         child.t('missing_translation');
         expect(miss).to.equal(0);
