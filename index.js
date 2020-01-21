@@ -252,6 +252,8 @@ class I18nChild extends I18n {
 
         this.$scope = scopeChain.join('.') || undefined;
         this.parent = parent;
+        this[MISSING] = this.parent[MISSING];
+        this[EMPTY] = this.parent[EMPTY];
     }
 
     /**
