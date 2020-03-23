@@ -4,8 +4,8 @@
  */
 
 const get = require('lodash.get');
+const merge = require('lodash.merge');
 const paraphrase = require('paraphrase');
-const assign = require('@recursive/assign');
 const freeze = require('deep-freeze');
 const _global = require('./utils/glob');
 const getOneOther = require('./utils/get-one-other');
@@ -71,7 +71,7 @@ class I18n {
      */
     add(...args) {
         args.unshift({}, this.translations);
-        this[TRANSLATIONS] = freeze(assign(...args));
+        this[TRANSLATIONS] = freeze(merge(...args));
 
         return this;
     }
