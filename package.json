@@ -23,7 +23,7 @@
     "lint": "eslint -c .eslintrc '**/*.js' '*.js'"
   },
   "dependencies": {
-    "@recursive/assign": "^2.0.0",
+    "@recursive/assign": "^2.0.1",
     "deep-freeze": "0.0.1",
     "lodash.get": "^4.4.2",
     "paraphrase": "^1.7.3"
