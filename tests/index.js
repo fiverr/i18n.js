@@ -102,12 +102,20 @@ describe('I18n', () => {
         expect(i18n.translate('root.is.a.object')).to.be.an('object');
     });
 
-    it('add translations', () => {
+    it('add translations - value type: object', () => {
         expect(i18n.translate('just.another.missing_key')).to.equal('missing key');
         i18n.add({just: {another: {missing_key: 'different value'}}});
         expect(i18n.translate('just.another.missing_key')).to.equal('different value');
         i18n.add({yet: {another: {key: 'I exist, too'}}});
         expect(i18n.translate('yet.another.key')).to.equal('I exist, too');
+    });
+
+    it('add translations - value type: array', () => {
+        expect(i18n.translate('just.another.missing_key_for_array')).to.equal('missing key for array');
+        i18n.add({just: {another: {missing_key_for_array: ['a', 'b']}}});
+        expect(i18n.translate('just.another.missing_key_for_array')).to.deep.equal(['a', 'b']);
+        i18n.add({just: {another: {missing_key_for_array: ['a', 'b', 'c']}}});
+        expect(i18n.translate('just.another.missing_key_for_array')).to.deep.equal(['a', 'b', 'c']);
     });
 
     it('finds translations in scope', () => {
