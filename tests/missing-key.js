@@ -1,4 +1,4 @@
-const {expect} = require('chai');
+const { expect } = require('chai');
 
 const I18n = require('../');
 
@@ -153,7 +153,7 @@ describe('missing keys report', () => {
     });
 
     it('reports missing keys using "onmiss"', () => {
-        const i18n = new I18n({$scope: 'some.scope'});
+        const i18n = new I18n({ $scope: 'some.scope' });
 
         i18n.onmiss((key, scope, translations) => {
             expect(scope).to.equal('some.scope');

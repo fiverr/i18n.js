@@ -1,10 +1,10 @@
-const {expect} = require('chai');
+const { expect } = require('chai');
 
 const I18n = require('../');
 const translations = require('./translations-stub.json');
 
 describe('child instances', () => {
-    const i18n = new I18n({translations});
+    const i18n = new I18n({ translations });
     const child = i18n.spawn('controller_name.action_name');
 
     it('Can spawn a child with no scope', () => {
@@ -25,11 +25,11 @@ describe('child instances', () => {
     });
 
     it('Child adds translations to the parent\'s store under a namespace', () => {
-        child.add({nonsense: {words: 'Non sense words'}});
-        child.add({introduction: 'Hi, my name is %{username}'});
+        child.add({ nonsense: { words: 'Non sense words' } });
+        child.add({ introduction: 'Hi, my name is %{username}' });
 
-        expect(child.t('introduction', {username: 'Martin'})).to.equal('Hi, my name is Martin');
-        expect(i18n.t('controller_name.action_name.introduction', {username: 'Martin'})).to.equal('Hi, my name is Martin');
+        expect(child.t('introduction', { username: 'Martin' })).to.equal('Hi, my name is Martin');
+        expect(i18n.t('controller_name.action_name.introduction', { username: 'Martin' })).to.equal('Hi, my name is Martin');
     });
 
     it('Child\'s $scope is an approachable attribute', () => {
@@ -38,7 +38,7 @@ describe('child instances', () => {
     });
 
     it('Child\'s scope in nested under parent\'s scope (when applicable)', () => {
-        const i18n = new I18n({translations, $scope: 'en'});
+        const i18n = new I18n({ translations, $scope: 'en' });
         const child = i18n.spawn('page');
 
         expect(i18n.t('title')).to.equal('My App');
@@ -46,20 +46,20 @@ describe('child instances', () => {
     });
 
     it('Child should check its own scope before parent', () => {
-        const i18n = new I18n({translations: {
+        const i18n = new I18n({ translations: {
             key: 'Top',
             child: { key: 'Child' },
             something: { key: 'Something' }
-        }});
+        } });
         const child = i18n.spawn('child');
 
-        expect(i18n.t('key', {$scope: 'something'})).to.equal('Something');
+        expect(i18n.t('key', { $scope: 'something' })).to.equal('Something');
         expect(child.t('key')).to.equal('Child');
-        expect(child.t('key', {$scope: 'something'})).to.equal('Something');
+        expect(child.t('key', { $scope: 'something' })).to.equal('Something');
     });
 
     it('Child calls parent onmiss functionallity', () => {
-        const i18n = new I18n({translations});
+        const i18n = new I18n({ translations });
         let miss = 0;
         i18n.onmiss(() => miss++);
         const child = i18n.spawn('child');
@@ -68,7 +68,7 @@ describe('child instances', () => {
     });
 
     it('Child overrides parent onmiss functionallity', () => {
-        const i18n = new I18n({translations});
+        const i18n = new I18n({ translations });
         let miss = 0;
         let childMiss = 0;
         i18n.onmiss(() => miss++);

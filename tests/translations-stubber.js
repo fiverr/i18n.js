@@ -20,5 +20,5 @@ module.exports = (seed = 'abcdefgh') => {
         return `obj.${seed[index]}${(suffix ? `.${suffix}` : '')}`;
     });
 
-    return {translations, keys};
+    return { translations, keys };
 };

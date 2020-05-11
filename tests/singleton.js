@@ -1,4 +1,4 @@
-const {expect} = require('chai');
+const { expect } = require('chai');
 const importFresh = require('import-fresh');
 
 const _global = global;
@@ -19,9 +19,9 @@ describe('Singleton', () => {
         const i18n_b = importFresh('../').singleton;
         const i18n_c = importFresh('../').singleton;
 
-        i18n_a.add({a: 'one'});
-        i18n_b.add({b: 'two'});
-        i18n_c.add({b: 'three'});
+        i18n_a.add({ a: 'one' });
+        i18n_b.add({ b: 'two' });
+        i18n_c.add({ b: 'three' });
 
         expect(i18n_b.t('a')).to.equal('one');
         expect(i18n_b.t('b')).to.equal('three');

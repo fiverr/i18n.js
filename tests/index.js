@@ -1,4 +1,4 @@
-const {assert, expect} = require('chai');
+const { assert, expect } = require('chai');
 
 const I18n = require('../');
 const translations = require('./translations-stub.json');
@@ -6,7 +6,7 @@ const translations = require('./translations-stub.json');
 const $scope = 'controller_name.action_name';
 
 describe('I18n', () => {
-    const i18n = new I18n({translations, $scope});
+    const i18n = new I18n({ translations, $scope });
 
     it('object initiates correctly', () => {
         expect(translations).to.deep.equal(translations);
@@ -18,7 +18,7 @@ describe('I18n', () => {
     });
 
     it('instance translations cannot be set', () => {
-        const newTranslations = {a: 1};
+        const newTranslations = { a: 1 };
         i18n.translations = newTranslations;
 
         expect(i18n.translations).not.to.deep.equal(newTranslations);
@@ -33,7 +33,7 @@ describe('I18n', () => {
         expect(i18n.translations.root).to.not.have.any.keys(['add_key']);
 
         i18n.add({
-            something: {is: {an: 'object'}}
+            something: { is: { an: 'object' } }
         });
 
         i18n.translations.something.add_key = 'Added key';
@@ -42,12 +42,12 @@ describe('I18n', () => {
     });
 
     it('adding assigns only relevant endpoints', () => {
-        i18n.add({ new: {item: {a: 'A!', b: 'B!'}} });
+        i18n.add({ new: { item: { a: 'A!', b: 'B!' } } });
 
         expect(i18n.translate('new.item.a')).to.equal('A!');
         expect(i18n.translate('new.item.b')).to.equal('B!');
 
-        i18n.add({ new: {item: {b: 'BEE!'}} });
+        i18n.add({ new: { item: { b: 'BEE!' } } });
 
         expect(i18n.translate('new.item.a')).to.equal('A!');
         expect(i18n.translate('new.item.b')).to.equal('BEE!');
@@ -80,7 +80,7 @@ describe('I18n', () => {
     });
 
     it('interpolates values', () => {
-        expect(i18n.translate('root.interpolated.phrase', {item: 'a thing', another: 'a different thing'}))
+        expect(i18n.translate('root.interpolated.phrase', { item: 'a thing', another: 'a different thing' }))
             .to.equal('Please replace a thing with a thing and a different thing thing');
     });
 
@@ -91,9 +91,9 @@ describe('I18n', () => {
 
     it('one other', () => {
         expect(i18n.translate('root.wait')).to.be.an('object');
-        expect(i18n.translate('root.wait', {count: 1})).to.equal('Wait one day');
-        expect(i18n.translate('root.wait', {count: 2})).to.equal('Wait 2 days');
-        expect(i18n.translate('root.wait', {count: 'two'})).to.equal('Wait two days');
+        expect(i18n.translate('root.wait', { count: 1 })).to.equal('Wait one day');
+        expect(i18n.translate('root.wait', { count: 2 })).to.equal('Wait 2 days');
+        expect(i18n.translate('root.wait', { count: 'two' })).to.equal('Wait two days');
     });
 
     it('more types', () => {
@@ -104,17 +104,17 @@ describe('I18n', () => {
 
     it('add translations - value type: object', () => {
         expect(i18n.translate('just.another.missing_key')).to.equal('missing key');
-        i18n.add({just: {another: {missing_key: 'different value'}}});
+        i18n.add({ just: { another: { missing_key: 'different value' } } });
         expect(i18n.translate('just.another.missing_key')).to.equal('different value');
-        i18n.add({yet: {another: {key: 'I exist, too'}}});
+        i18n.add({ yet: { another: { key: 'I exist, too' } } });
         expect(i18n.translate('yet.another.key')).to.equal('I exist, too');
     });
 
     it('add translations - value type: array', () => {
         expect(i18n.translate('just.another.missing_key_for_array')).to.equal('missing key for array');
-        i18n.add({just: {another: {missing_key_for_array: ['a', 'b']}}});
+        i18n.add({ just: { another: { missing_key_for_array: ['a', 'b'] } } });
         expect(i18n.translate('just.another.missing_key_for_array')).to.deep.equal(['a', 'b']);
-        i18n.add({just: {another: {missing_key_for_array: ['a', 'b', 'c']}}});
+        i18n.add({ just: { another: { missing_key_for_array: ['a', 'b', 'c'] } } });
         expect(i18n.translate('just.another.missing_key_for_array')).to.deep.equal(['a', 'b', 'c']);
     });
 

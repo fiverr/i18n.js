@@ -28,7 +28,7 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
  * @param {Function} [options.empty]      Method to call when value is empty
  */
 class I18n {
-    constructor({translations = {}, $scope, missing, empty} = {translations: {}}) {
+    constructor({ translations = {}, $scope, missing, empty } = { translations: {} }) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = () => undefined;
         this[EMPTY] = () => undefined;
@@ -139,7 +139,7 @@ class I18n {
      */
     alternatives(key, data) {
         return [data || {}, this].map(
-            ({$scope}) => $scope
+            ({ $scope }) => $scope
         ).filter(
             Boolean
         ).map(
