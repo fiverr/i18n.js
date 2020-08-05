@@ -34,6 +34,6 @@
     "eslint": "^7.2.0",
     "eslint-plugin-log": "^1.2.3",
     "import-fresh": "^3.0.0",
-    "mocha": "^6.2.1"
+    "mocha": "^8.1.1"
   }
 }
