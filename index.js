@@ -10,6 +10,7 @@ const freeze = require('deep-freeze');
 const _global = require('./utils/glob');
 const getOneOther = require('./utils/get-one-other');
 const jsonclone = require('./utils/jsonclone');
+const injectTemplates = require('./inject-templates');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
@@ -107,6 +108,8 @@ class I18n {
 
         const type = typeof result;
         result = type === 'string' ? interpolate(result, data) : result;
+
+        result = injectTemplates(result, data);
 
         return ACCEPTABLE_RETURN_TYPES.includes(type)
             ? result
