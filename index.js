@@ -108,8 +108,7 @@ class I18n {
 
         const type = typeof result;
         result = type === 'string' ? interpolate(result, data) : result;
-
-        result = injectTemplates(result, data);
+        result = type === 'string' ? injectTemplates(result, data) : result;
 
         return ACCEPTABLE_RETURN_TYPES.includes(type)
             ? result

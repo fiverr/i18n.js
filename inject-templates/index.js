@@ -4,7 +4,7 @@ const { templateStartSymbol, templateEndSymbol } = require('./config');
 const templateRegex = new RegExp(`\\${templateStartSymbol}([^${templateStartSymbol}${templateEndSymbol}]+)${templateEndSymbol}`, 'g');
 
 function injectTemplates(translation, data) {
-    if (!has(data, '$templates')) {
+    if (!data || !has(data, '$templates')) {
         return translation;
     }
 
