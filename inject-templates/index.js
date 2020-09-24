@@ -16,15 +16,10 @@ function injectTemplates(translation, data) {
     let i = 0;
 
     while (match && match.length) {
-        const search = result.search(templateEndSymbol);
-
         const currentMatch = match[0];
         const currentTemplate = templates[i];
 
-        const prefix = result.substring(0, search);
-        const matchContent = currentMatch.substring(templateStartSymbol.length, currentMatch.length - templateStartSymbol.length - templateEndSymbol.length + 1);
-        const suffix = result.substring(prefix.length + currentMatch.length);
-
+        const [prefix, matchContent, suffix] = deconstruct(result, currentMatch);
         result = `${prefix}${currentTemplate(matchContent)}${suffix}`;
 
         match = result.match(templateRegex);
@@ -32,6 +27,33 @@ function injectTemplates(translation, data) {
     }
 
     return result;
+}
+
+function deconstruct(result, match) {
+    const prefix = extractPrefix(result);
+    const matchContent = extractMatchContent(match);
+    const suffix = extractSuffix(result, prefix, match);
+
+    return [prefix, matchContent, suffix];
+}
+
+function extractPrefix(result) {
+    const startIndex = 0;
+    const length = result.search(templateRegex);
+
+    return result.substring(startIndex, length);
+}
+
+function extractMatchContent(match) {
+    const startIndex = templateStartSymbol.length;
+    const length = match.length - templateStartSymbol.length - templateEndSymbol.length + 1;
+
+    return match.substring(startIndex, length);
+}
+
+function extractSuffix(result, prefix, match) {
+    const startIndex = prefix.length + match.length;
+    return result.substring(startIndex);
 }
 
 module.exports = injectTemplates;
