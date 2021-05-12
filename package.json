@@ -26,7 +26,7 @@
     "@recursive/assign": "^2.0.2",
     "deep-freeze": "0.0.1",
     "lodash.get": "^4.4.2",
-    "paraphrase": "^1.7.3"
+    "paraphrase": "^2.0.0"
   },
   "devDependencies": {
     "@fiverr/eslint-config-fiverr": "^3.1.3",
