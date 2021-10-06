@@ -18,6 +18,7 @@
     "url": "git+https://github.com/fiverr/i18n.js.git"
   },
   "main": "index.js",
+  "types": "./types.d.ts",
   "scripts": {
     "test": "mocha ./tests/*.js --inspect",
     "lint": "eslint -c .eslintrc '**/*.js' '*.js'"
