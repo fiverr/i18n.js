@@ -20,6 +20,23 @@ describe('missing keys report', () => {
         expect(reported).to.be.true;
     });
 
+    it('reports missing error on no key passed', () => {
+        let reported = false;
+        const i18n = new I18n({
+            $scope: 'some.scope',
+            missing: (key, scope, translations) => {
+                reported = true;
+                expect(scope).to.equal('some.scope');
+                expect(key).to.equal('undefined');
+                expect(translations).to.be.an('object');
+                expect(translations).to.be.empty;
+            }
+        });
+
+        i18n.translate();
+        expect(reported).to.be.true;
+    });
+
     it('reports missing key for undefined', () => {
         let reported = false;
         const i18n = new I18n({
