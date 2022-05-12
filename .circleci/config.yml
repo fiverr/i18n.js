@@ -82,8 +82,7 @@ workflows:
           matrix:
             parameters:
               image:
-                - cimg/node:10.24
-                - cimg/node:12.13
+                - cimg/node:12.22
                 - cimg/node:14.19
                 - cimg/node:16.15
                 - cimg/node:18.1
