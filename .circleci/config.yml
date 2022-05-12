@@ -48,7 +48,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:8
+      - image: cimg/node:lts
     steps:
       - checkout
       - attach_workspace:
