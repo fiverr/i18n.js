@@ -2,6 +2,6 @@
 
 ## 1.8.4 (Apr 17, 2023)
 
-### Feat
+### Improvements
 
 - Add types for typescript consumers.
