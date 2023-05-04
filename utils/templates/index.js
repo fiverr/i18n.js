@@ -1,7 +1,4 @@
-const { logger } = require('@fiverr-private/obs');
 const {
-    UNKNOWN_TEMPLATE_NAME,
-    INVALID_TEMPLATE_TYPE,
     TEMPLATE_ELEMENT_NAMES_REGEX,
     TEMPLATE_OPEN_CLOSE_ELEMENT_CONTENT_REGEX,
     TEMPLATE_SELF_CLOSING_ELEMENT_CONTENT_REGEX,
@@ -10,52 +7,11 @@ const {
 } = require('./constants');
 
 /**
- * Logs an error message when an invalid template type was used.
- * @param {*} template The template used.
- */
-const logInvalidTemplateError = (template) => {
-    logger.error([
-        INVALID_TEMPLATE_TYPE,
-        typeof template,
-        `(${JSON.stringify(template)})`
-    ].join(' '));
-};
-
-/**
- * Logs an error message when an unknown template name was used.
- * @param {*} templateName The template used.
- */
-const logUnknownTemplateError = (templateName) => {
-    logger.error(`${UNKNOWN_TEMPLATE_NAME} ${templateName}`);
-};
-
-/**
  * Checks whether a given function is actually a function.
  * @param {Function} fn The function to check.
  * @return {Boolean}
  */
 const isFunction = (fn) => typeof fn === 'function';
-
-/**
- * Validates that the passed templates:
- * 1. Exists (either as predefined templates or in the custom templates).
- * 2. Are functions.
- * @param {String[]} templateNamesArray The template names matches.
- * @param {Record.<String, Function>} templates The templates passed merged with the predefined templates
- */
-const validateTemplates = (templateNamesArray, templates) => {
-    // Every second item should be a template.
-    // Ex: When we split "<t name='link'>Click</t><t name='bold'>Here</t>" by its regex TEMPLATE_ELEMENT_NAMES_REGEX
-    // The output is: ["", "link", "Click</t>", "bold", "Here</t>"]
-    // You can see that indexes 1 and 3 contains the names of the templates
-    templateNamesArray
-        .filter((templateName, i) => (i % 2 === 1 && !templates[templateName]))
-        .forEach(logUnknownTemplateError);
-
-    Object.values(templates)
-        .filter((template) => !isFunction(template))
-        .forEach(logInvalidTemplateError);
-};
 
 /**
  * Split the translation by both:
@@ -98,12 +54,10 @@ const getContentArray = (translation) => {
  * @param {Record.<String, Function>} templates The templates that will be injected.
  * @return {React.Component}
  */
-const injectTemplates = (originTranslation, templates = {}, templatesTransformer = (tokens) => tokens.join('')) => {
+const injectTemplates = (originTranslation, templates, templatesTransformer = (tokens) => tokens.join('')) => {
     const translation = originTranslation.replace(TEMPLATE_BR_OPEN_ONLY_REGEX, TEMPLATE_BR_SELF_CLOSING_STRING);
     const templateNamesArray = translation.split(TEMPLATE_ELEMENT_NAMES_REGEX);
     const contentArray = getContentArray(translation);
-
-    validateTemplates(templateNamesArray, templates);
 
     const tokens = contentArray.map((translationPart, index) => {
         const templateName = templateNamesArray[index];
