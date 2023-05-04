@@ -28,8 +28,9 @@ describe('child instances', () => {
         child.add({ nonsense: { words: 'Non sense words' } });
         child.add({ introduction: 'Hi, my name is %{username}' });
 
-        expect(child.t('introduction', { username: 'Martin' })).to.equal('Hi, my name is Martin');
-        expect(i18n.t('controller_name.action_name.introduction', { username: 'Martin' })).to.equal('Hi, my name is Martin');
+        const params = { username: 'Martin' };
+        expect(child.t('introduction', { params })).to.equal('Hi, my name is Martin');
+        expect(i18n.t('controller_name.action_name.introduction', { params })).to.equal('Hi, my name is Martin');
     });
 
     it('Child\'s $scope is an approachable attribute', () => {
@@ -46,16 +47,20 @@ describe('child instances', () => {
     });
 
     it('Child should check its own scope before parent', () => {
-        const i18n = new I18n({ translations: {
-            key: 'Top',
-            child: { key: 'Child' },
-            something: { key: 'Something' }
-        } });
+        const i18n = new I18n({
+            translations: {
+                key: 'Top',
+                child: { key: 'Child' },
+                something: { key: 'Something' }
+            }
+        });
         const child = i18n.spawn('child');
 
-        expect(i18n.t('key', { $scope: 'something' })).to.equal('Something');
+        const params = { $scope: 'something' };
+
+        expect(i18n.t('key', { params })).to.equal('Something');
         expect(child.t('key')).to.equal('Child');
-        expect(child.t('key', { $scope: 'something' })).to.equal('Something');
+        expect(child.t('key', { params })).to.equal('Something');
     });
 
     it('Child calls parent onmiss functionallity', () => {

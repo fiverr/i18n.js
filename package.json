@@ -1,6 +1,6 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.8.3",
+  "version": "2.0.0-rc",
   "description": "Translation helper",
   "keywords": [
     "i18n",
@@ -23,6 +23,7 @@
     "lint": "eslint -c .eslintrc '**/*.js' '*.js'"
   },
   "dependencies": {
+    "@fiverr-private/obs": "^1.29.2",
     "@recursive/assign": "^2.0.2",
     "deep-freeze": "0.0.1",
     "lodash.get": "^4.4.2",

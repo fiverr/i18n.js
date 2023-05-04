@@ -80,7 +80,9 @@ describe('I18n', () => {
     });
 
     it('interpolates values', () => {
-        expect(i18n.translate('root.interpolated.phrase', { item: 'a thing', another: 'a different thing' }))
+        const params = { item: 'a thing', another: 'a different thing' };
+
+        expect(i18n.translate('root.interpolated.phrase', { params }))
             .to.equal('Please replace a thing with a thing and a different thing thing');
     });
 
@@ -91,9 +93,9 @@ describe('I18n', () => {
 
     it('one other', () => {
         expect(i18n.translate('root.wait')).to.be.an('object');
-        expect(i18n.translate('root.wait', { count: 1 })).to.equal('Wait one day');
-        expect(i18n.translate('root.wait', { count: 2 })).to.equal('Wait 2 days');
-        expect(i18n.translate('root.wait', { count: 'two' })).to.equal('Wait two days');
+        expect(i18n.translate('root.wait', { params: { count: 1 } })).to.equal('Wait one day');
+        expect(i18n.translate('root.wait', { params: { count: 2 } })).to.equal('Wait 2 days');
+        expect(i18n.translate('root.wait', { params: { count: 'two' } })).to.equal('Wait two days');
     });
 
     it('more types', () => {
@@ -128,7 +130,7 @@ describe('I18n', () => {
         expect(i18n.translate(`${i18n.$scope}.i.am.in.scope`)).to.equal('I am in scope');
 
         expect(i18n.translate('i.am.in.scope', {
-            $scope: 'another_controller_name.action_name'
+            params: { $scope: 'another_controller_name.action_name' }
         })).to.equal('I am in a different scope');
     });
 
@@ -139,7 +141,7 @@ describe('I18n', () => {
                 'i.am.in.scope'
             ],
             {
-                $scope: 'another_controller_name.action_name'
+                params: { $scope: 'another_controller_name.action_name' }
             }
         )).to.equal('I am in a different scope');
     });
@@ -167,21 +169,21 @@ describe('I18n', () => {
         });
 
         [
-            [ 'lookup.key' ],
-            [ 'lookup.biscuit' ],
-            [ ['lookup.pie', 'lookup.key'] ],
-            [ 'key', { $scope: 'lookup' } ],
-            [ [ 'pie', 'key' ], { $scope: 'lookup' } ]
+            ['lookup.key'],
+            ['lookup.biscuit'],
+            [['lookup.pie', 'lookup.key']],
+            ['key', { $scope: 'lookup' }],
+            [['pie', 'key'], { $scope: 'lookup' }]
         ].forEach(
             (args) => expect(i18n.has(...args), args).to.be.true
         );
 
         [
-            [ 'lookup.pie' ],
-            [ ['lookup.pie', 'lookup.cake'] ],
-            [ 'key' ],
+            ['lookup.pie'],
+            [['lookup.pie', 'lookup.cake']],
+            ['key'],
             [],
-            [ null ]
+            [null]
         ].forEach(
             (args) => expect(i18n.has(...args), args).to.be.false
         );
@@ -191,5 +193,14 @@ describe('I18n', () => {
         expect(child.has('key'), 'child.key').to.be.true;
         expect(child.has('biscuit'), 'child.biscuit').to.be.true;
         expect(child.has('pie'), 'child.pie').to.be.false;
+    });
+
+    describe('templates', () => {
+        const templates = {
+            custom: (text) => `<a class='my-link'>${text}</a>`
+        };
+
+        expect(i18n.translate('root.templated.custom', { templates }))
+            .to.equal("Please click <a class='my-link'>here</a> to continue");
     });
 });

@@ -10,6 +10,7 @@ const freeze = require('deep-freeze');
 const _global = require('./utils/glob');
 const getOneOther = require('./utils/get-one-other');
 const jsonclone = require('./utils/jsonclone');
+const { injectTemplates, shouldInjectTemplates } = require('./utils');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
@@ -79,17 +80,20 @@ class I18n {
     /**
      * translate
      * @param  {String} key    String representing dot notation
-     * @param  {Object} [data] Interpolation data
+     * @param {Object} options - the options param that enables customization when needed.
+     * @param {Object} options.params - Interpolation params
+     * @param {Object} options.templates - Custom template to interpolate
      * @return {String} translated and interpolated
      */
-    translate(key, data) {
+    translate(key, options = {}) {
+        const { params = {}, templates = {} } = options;
 
-        const keys = Array.isArray(key) ? key : [ key ];
+        const keys = Array.isArray(key) ? key : [key];
 
         // Create key alternatives with prefixes
         const alternatives = [].concat(
             ...keys.map(
-                (key) => this.alternatives(key, data)
+                (key) => this.alternatives(key, params)
             )
         );
 
@@ -97,7 +101,7 @@ class I18n {
         let result = this.find(...alternatives);
 
         // Handle one,other translation structure
-        result = getOneOther(result, data);
+        result = getOneOther(result, params);
 
         if (EMPTY_VALUES.includes(result)) {
             return this[EMPTY](
@@ -106,25 +110,29 @@ class I18n {
         }
 
         const type = typeof result;
-        result = type === 'string' ? interpolate(result, data) : result;
+        result = type === 'string' ? interpolate(result, params) : result;
 
-        return ACCEPTABLE_RETURN_TYPES.includes(type)
-            ? result
-            : this[MISSING](
-                `${key}`, this.$scope, this.translations
-            ) || I18n.getDefault(...keys);
+        if (!ACCEPTABLE_RETURN_TYPES.includes(type)) {
+            return this[MISSING](`${key}`, this.$scope, this.translations) || I18n.getDefault(...keys);
+        }
+
+        if (shouldInjectTemplates(result)) {
+            return injectTemplates(result, templates);
+        }
+
+        return result;
     }
 
     /**
      * Check if a translation key exists
      * @param  {string|string[]} keys
-     * @param  {Object}          data
+     * @param  {Object}          params
      * @return {Boolean}      [description]
      */
-    has(keys, data) {
-        keys = Array.isArray(keys) ? keys : [ keys ];
+    has(keys, params) {
+        keys = Array.isArray(keys) ? keys : [keys];
         const alternatives = keys.reduce(
-            (accumulator, key) => accumulator.concat(this.alternatives(key, data)),
+            (accumulator, key) => accumulator.concat(this.alternatives(key, params)),
             []
         );
 
@@ -134,11 +142,11 @@ class I18n {
     /**
      * Create key alternatives with prefixes according to instance scopes
      * @param  {string}   key
-     * @param  {object}   data Object optionally containing '$scope' parameter
+     * @param  {object}   params Object optionally containing '$scope' parameter
      * @return {string[]}
      */
-    alternatives(key, data) {
-        return [data || {}, this].map(
+    alternatives(key, params) {
+        return [params || {}, this].map(
             ({ $scope }) => $scope
         ).filter(
             Boolean
