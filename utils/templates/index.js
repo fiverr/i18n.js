@@ -98,7 +98,7 @@ const getContentArray = (translation) => {
  * @param {Record.<String, Function>} templates The templates that will be injected.
  * @return {React.Component}
  */
-const injectTemplates = (originTranslation, templates = {}) => {
+const injectTemplates = (originTranslation, templates = {}, templatesTransformer = (tokens) => tokens.join('')) => {
     const translation = originTranslation.replace(TEMPLATE_BR_OPEN_ONLY_REGEX, TEMPLATE_BR_SELF_CLOSING_STRING);
     const templateNamesArray = translation.split(TEMPLATE_ELEMENT_NAMES_REGEX);
     const contentArray = getContentArray(translation);
@@ -117,7 +117,7 @@ const injectTemplates = (originTranslation, templates = {}) => {
         return templateFunc(translationPart);
     });
 
-    return tokens.join('');
+    return templatesTransformer(tokens);
 };
 
 /**

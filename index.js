@@ -83,10 +83,11 @@ class I18n {
      * @param {Object} options - the options param that enables customization when needed.
      * @param {Object} options.params - Interpolation params
      * @param {Object} options.templates - Custom template to interpolate
+     * @param {Object} options.templatesTransformer - Custom template transformer
      * @return {String} translated and interpolated
      */
     translate(key, options = {}) {
-        const { params = {}, templates = {} } = options;
+        const { params = {}, templates = {}, templatesTransformer } = options;
 
         const keys = Array.isArray(key) ? key : [key];
 
@@ -117,7 +118,7 @@ class I18n {
         }
 
         if (shouldInjectTemplates(result)) {
-            return injectTemplates(result, templates);
+            return injectTemplates(result, templates, templatesTransformer);
         }
 
         return result;
