@@ -50,8 +50,6 @@ jobs:
           command: npm run lint -- --plugin log
   publish:
     <<: *defaults
-    docker:
-      - image: cimg/node:12.22
     steps:
       - checkout
       - restore_cache:
