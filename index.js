@@ -7,10 +7,7 @@ const get = require('lodash.get');
 const paraphrase = require('paraphrase');
 const assign = require('@recursive/assign');
 const freeze = require('deep-freeze');
-const _global = require('./utils/glob');
-const getOneOther = require('./utils/get-one-other');
-const jsonclone = require('./utils/jsonclone');
-const { injectTemplates, shouldInjectTemplates } = require('./utils');
+const { injectTemplates, shouldInjectTemplates, getOneOther, jsonclone, glob } = require('./utils');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
@@ -118,7 +115,11 @@ class I18n {
         }
 
         if (shouldInjectTemplates(result)) {
-            return injectTemplates(result, templates, templatesTransformer);
+            return injectTemplates({
+                originTranslation: result,
+                templates,
+                templatesTransformer
+            });
         }
 
         return result;
@@ -143,11 +144,11 @@ class I18n {
     /**
      * Create key alternatives with prefixes according to instance scopes
      * @param  {string}   key
-     * @param  {object}   params Object optionally containing '$scope' parameter
+     * @param  {object}   [params] Object optionally containing '$scope' parameter
      * @return {string[]}
      */
-    alternatives(key, params) {
-        return [params || {}, this].map(
+    alternatives(key, params = {}) {
+        return [params, this].map(
             ({ $scope }) => $scope
         ).filter(
             Boolean
@@ -224,21 +225,21 @@ class I18n {
      * const i18n = I18n.singleton;
      */
     static get singleton() {
-        if (_global.i18n) {
-            return _global.i18n;
+        if (glob.i18n) {
+            return glob.i18n;
         }
 
         const i18n = new I18n();
 
         try {
-            Object.defineProperty(_global, 'i18n', {
+            Object.defineProperty(glob, 'i18n', {
                 value: i18n,
                 writable: false,
                 enumerable: false,
                 configurable: false
             });
         } catch (e) {
-            _global.i18n = i18n;
+            glob.i18n = i18n;
         }
 
         return i18n;

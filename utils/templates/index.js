@@ -50,11 +50,13 @@ const getContentArray = (translation) => {
 /**
  * Finds all template patterns and wraps them with the template (component) that matches its index,
  * while cleaning up the templates' declaration symbols.
- * @param {String} originTranslation The translation into which the templates will be injected.
- * @param {Record.<String, Function>} templates The templates that will be injected.
+ * @param {Object} options
+ * @param {String} options.originTranslation The translation into which the templates will be injected.
+ * @param {Record.<String, Function>} options.templates The templates that will be injected.
+ * @param {Record.<String, Function>} options.templatesTransformer The templates transformer function
  * @return {React.Component}
  */
-const injectTemplates = (originTranslation, templates, templatesTransformer = (tokens) => tokens.join('')) => {
+const injectTemplates = ({ originTranslation, templates, templatesTransformer = (tokens) => tokens.join('') }) => {
     const translation = originTranslation.replace(TEMPLATE_BR_OPEN_ONLY_REGEX, TEMPLATE_BR_SELF_CLOSING_STRING);
     const templateNamesArray = translation.split(TEMPLATE_ELEMENT_NAMES_REGEX);
     const contentArray = getContentArray(translation);

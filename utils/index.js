@@ -1,6 +1,12 @@
-const { injectTemplates, shouldInjectTemplates } = require('./templates');
+const { getOneOther } = require('./get-one-other');
+const { jsonclone } = require('./jsonclone');
+const { glob } = require('./glob');
+const { shouldInjectTemplates, injectTemplates } = require('./templates');
 
 module.exports = {
-    injectTemplates,
-    shouldInjectTemplates
+    getOneOther,
+    jsonclone,
+    glob,
+    shouldInjectTemplates,
+    injectTemplates
 };

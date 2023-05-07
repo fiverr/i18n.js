@@ -94,7 +94,7 @@ describe('missing keys report', () => {
         '',
         null
     ].forEach(
-        (item) => it.skip(`reports empty value for ${item}`, () => {
+        (item) => it(`reports empty value for ${item}`, () => {
             let reported = false;
             const i18n = new I18n({
                 $scope: 'some.scope',

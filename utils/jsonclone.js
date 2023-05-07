@@ -3,10 +3,14 @@
  * @param  {Object} object
  * @return {Object}
  */
-module.exports = function jsonclone(object) {
+const jsonclone = (object) => {
     try {
         return JSON.parse(JSON.stringify(object));
     } catch (e) {
         return {};
     }
+};
+
+module.exports = {
+    jsonclone
 };

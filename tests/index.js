@@ -196,11 +196,16 @@ describe('I18n', () => {
     });
 
     describe('templates', () => {
-        const templates = {
-            custom: (text) => `<a class='my-link'>${text}</a>`
-        };
+        describe('When a custom template is provided', () => {
+            it('Should inject custom template', () => {
+                const templates = {
+                    custom: (text) => `<a class='my-link'>${text}</a>`
+                };
 
-        expect(i18n.translate('root.templated.custom', { templates }))
-            .to.equal("Please click <a class='my-link'>here</a> to continue");
+                const translated = i18n.translate('root.templated.custom', { templates });
+
+                expect(translated).to.equal("Please click <a class='my-link'>here</a> to continue");
+            });
+        });
     });
 });
