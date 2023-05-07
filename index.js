@@ -3,7 +3,7 @@
  * @since 1.0.0
  */
 
-const get = require('lodash.get');
+const { get } = require('lodash');
 const paraphrase = require('paraphrase');
 const assign = require('@recursive/assign');
 const freeze = require('deep-freeze');
