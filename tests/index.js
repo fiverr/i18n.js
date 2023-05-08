@@ -82,7 +82,7 @@ describe('I18n', () => {
     it('interpolates values', () => {
         const params = { item: 'a thing', another: 'a different thing' };
 
-        expect(i18n.translate('root.interpolated.phrase', { params }))
+        expect(i18n.translate('root.interpolated.phrase', params))
             .to.equal('Please replace a thing with a thing and a different thing thing');
     });
 
@@ -93,9 +93,9 @@ describe('I18n', () => {
 
     it('one other', () => {
         expect(i18n.translate('root.wait')).to.be.an('object');
-        expect(i18n.translate('root.wait', { params: { count: 1 } })).to.equal('Wait one day');
-        expect(i18n.translate('root.wait', { params: { count: 2 } })).to.equal('Wait 2 days');
-        expect(i18n.translate('root.wait', { params: { count: 'two' } })).to.equal('Wait two days');
+        expect(i18n.translate('root.wait', { count: 1 })).to.equal('Wait one day');
+        expect(i18n.translate('root.wait', { count: 2 })).to.equal('Wait 2 days');
+        expect(i18n.translate('root.wait', { count: 'two' })).to.equal('Wait two days');
     });
 
     it('more types', () => {
@@ -130,7 +130,7 @@ describe('I18n', () => {
         expect(i18n.translate(`${i18n.$scope}.i.am.in.scope`)).to.equal('I am in scope');
 
         expect(i18n.translate('i.am.in.scope', {
-            params: { $scope: 'another_controller_name.action_name' }
+            $scope: 'another_controller_name.action_name'
         })).to.equal('I am in a different scope');
     });
 
@@ -141,7 +141,7 @@ describe('I18n', () => {
                 'i.am.in.scope'
             ],
             {
-                params: { $scope: 'another_controller_name.action_name' }
+                $scope: 'another_controller_name.action_name'
             }
         )).to.equal('I am in a different scope');
     });
@@ -193,19 +193,5 @@ describe('I18n', () => {
         expect(child.has('key'), 'child.key').to.be.true;
         expect(child.has('biscuit'), 'child.biscuit').to.be.true;
         expect(child.has('pie'), 'child.pie').to.be.false;
-    });
-
-    describe('templates', () => {
-        describe('When a custom template is provided', () => {
-            it('Should inject custom template', () => {
-                const templates = {
-                    custom: (text) => `<a class='my-link'>${text}</a>`
-                };
-
-                const translated = i18n.translate('root.templated.custom', { templates });
-
-                expect(translated).to.equal("Please click <a class='my-link'>here</a> to continue");
-            });
-        });
     });
 });

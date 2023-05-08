@@ -7,11 +7,12 @@ const { get } = require('lodash');
 const paraphrase = require('paraphrase');
 const assign = require('@recursive/assign');
 const freeze = require('deep-freeze');
-const { injectTemplates, shouldInjectTemplates, getOneOther, jsonclone, glob } = require('./utils');
+const { isTemplateInjectionEligible, injectTemplates, getOneOther, jsonclone, glob } = require('./utils');
 
 const TRANSLATIONS = typeof Symbol === 'function' ? Symbol() : '_translations';
 const MISSING = typeof Symbol === 'function' ? Symbol() : '_missing';
 const EMPTY = typeof Symbol === 'function' ? Symbol() : '_empty';
+const TEMPLATE_INJECTION_ERROR = typeof Symbol === 'function' ? Symbol() : '_template_injection_error';
 const EMPTY_VALUES = [null, ''];
 const ACCEPTABLE_RETURN_TYPES = ['object', 'number', 'boolean', 'string'];
 
@@ -20,18 +21,29 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
 /**
  * @class I18n
  * @classdesc an object capable of translating keys and interpolate using given data object
- * @param {Object}   options.translations JSON compliant object
- * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
- * @param {Function} [options.missing]    Method to call when key is not found
- * @param {Function} [options.empty]      Method to call when value is empty
+ * @param {Object}   options.translations                  JSON compliant object
+ * @param {String}   [options.$scope]                      Root string to be use for looking for translation keys
+ * @param {Function} [options.missing]                     Method to call when key is not found
+ * @param {Function} [options.empty]                       Method to call when value is empty
+ * @param {Function} [options.templateInjectionError]      Method to call when template injection fails
  */
 class I18n {
-    constructor({ translations = {}, $scope, missing, empty } = { translations: {} }) {
+    constructor({
+        translations = {},
+        $scope,
+        missing,
+        empty,
+        templateInjectionError
+    } = { translations: {} }) {
         this[TRANSLATIONS] = freeze(jsonclone(translations));
         this[MISSING] = () => undefined;
         this[EMPTY] = () => undefined;
+        this[TEMPLATE_INJECTION_ERROR] = () => undefined;
+
         this.onmiss(missing);
         this.onempty(empty);
+        this.onTemplateInjectionError(templateInjectionError);
+
         this.$scope = $scope;
 
         this.translate = this.translate.bind(this);
@@ -42,8 +54,8 @@ class I18n {
      * @param  {String} key
      * @return {String} A default string for a missing key
      */
-    static getDefault(key) {
-        return (key || '').split('.').pop().replace(/_/g, ' ');
+    static getDefault(key = '') {
+        return (key).split('.').pop().replace(/_/g, ' ');
     }
 
     /**
@@ -75,16 +87,14 @@ class I18n {
     }
 
     /**
-     * translate
-     * @param  {String} key    String representing dot notation
-     * @param {Object} options - the options param that enables customization when needed.
-     * @param {Object} options.params - Interpolation params
-     * @param {Object} options.templates - Custom template to interpolate
-     * @param {Object} options.templatesTransformer - Custom template transformer
-     * @return {String} translated and interpolated
-     */
-    translate(key, options = {}) {
-        const { params = {}, templates = {}, templatesTransformer } = options;
+    * Translate a key to an interpolated string.
+    *
+    * @param  {String} key    String representing dot notation
+    * @param  {Object} [data] Interpolation data
+    * @return {String} translated and interpolated
+    */
+    translate(key, data = {}) {
+        const { templates, templatesTransformer, ...params } = data;
 
         const keys = Array.isArray(key) ? key : [key];
 
@@ -114,15 +124,34 @@ class I18n {
             return this[MISSING](`${key}`, this.$scope, this.translations) || I18n.getDefault(...keys);
         }
 
-        if (shouldInjectTemplates(result)) {
-            return injectTemplates({
-                originTranslation: result,
-                templates,
-                templatesTransformer
-            });
+        if (isTemplateInjectionEligible(result)) {
+            return this.handleTemplateInjection(key, result, templates, templatesTransformer);
         }
 
         return result;
+    }
+
+    /**
+    * Inject all templates into the origin translation.
+    *
+    * @param {String} key String representing dot notation
+    * @param {String} originTranslation The translation into which the templates will be injected.
+    * @param {Record.<String, Function>} templates The templates that will be injected.
+    * @param {Record.<String, Function>} templatesTransformer The templates transformer function
+    * @return {String} template injected translation
+    */
+    handleTemplateInjection(key, originTranslation, templates, templatesTransformer) {
+        try {
+            return injectTemplates({
+                originTranslation,
+                templates,
+                templatesTransformer
+            });
+        } catch (error) {
+            return this[TEMPLATE_INJECTION_ERROR](
+                `${key}`, this.$scope, error.message
+            );
+        }
     }
 
     /**
@@ -204,6 +233,25 @@ class I18n {
     onempty(callback) {
         if (typeof callback === 'function') {
             this[EMPTY] = callback;
+        }
+        return this;
+    }
+
+    /**
+    * Register callback to be called when a template injection fails.
+    *
+    * Function accepts arguments: {String} missing key
+    *                             {String} translation scope
+    *                             {Object} The entire translation dictionary
+    * @param  {Function} callback
+    * @return {self}
+    *
+    * @example
+    * i18n.onTemplateInjectionError((key, value) => logTemplateInjectionError({ key, value })
+    */
+    onTemplateInjectionError(callback) {
+        if (typeof callback === 'function') {
+            this[TEMPLATE_INJECTION_ERROR] = callback;
         }
         return this;
     }

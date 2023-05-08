@@ -29,8 +29,8 @@ describe('child instances', () => {
         child.add({ introduction: 'Hi, my name is %{username}' });
 
         const params = { username: 'Martin' };
-        expect(child.t('introduction', { params })).to.equal('Hi, my name is Martin');
-        expect(i18n.t('controller_name.action_name.introduction', { params })).to.equal('Hi, my name is Martin');
+        expect(child.t('introduction', params)).to.equal('Hi, my name is Martin');
+        expect(i18n.t('controller_name.action_name.introduction', params)).to.equal('Hi, my name is Martin');
     });
 
     it('Child\'s $scope is an approachable attribute', () => {
@@ -58,9 +58,9 @@ describe('child instances', () => {
 
         const params = { $scope: 'something' };
 
-        expect(i18n.t('key', { params })).to.equal('Something');
+        expect(i18n.t('key', params)).to.equal('Something');
         expect(child.t('key')).to.equal('Child');
-        expect(child.t('key', { params })).to.equal('Something');
+        expect(child.t('key', params)).to.equal('Something');
     });
 
     it('Child calls parent onmiss functionallity', () => {
