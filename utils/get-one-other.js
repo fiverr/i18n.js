@@ -1,3 +1,5 @@
+const { has } = require('lodash');
+
 /**
  * get "one" or "other" from translation key item
  * @param  {Any} result
@@ -24,11 +26,3 @@ const isOneOther = (result, data) =>
     has(result, 'one') &&
     has(result, 'other') &&
     has(data, 'count');
-
-/**
- * Use Object prototype's hasOwnProperty directly
- * @param  {Object} target
- * @param  {String} property
- * @return {Boolean}
- */
-const has = (target, property) => Object.prototype.hasOwnProperty.call(target, property);

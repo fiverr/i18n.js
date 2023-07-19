@@ -30,24 +30,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-  testnode6:
-    <<: *defaults
-    docker:
-      - image: circleci/node:6.11.5
-    steps:
-      - runtests
-  testnode8:
-    <<: *defaults
-    docker:
-      - image: circleci/node:8
-    steps:
-      - runtests
-  testnode10:
-    <<: *defaults
-    docker:
-      - image: circleci/node:10
-    steps:
-      - runtests
   test:
     <<: *defaults
     steps:
@@ -68,8 +50,6 @@ jobs:
           command: npm run lint -- --plugin log
   publish:
     <<: *defaults
-    docker:
-      - image: circleci/node:8
     steps:
       - checkout
       - restore_cache:
@@ -103,17 +83,11 @@ workflows:
       - lint:
           requires:
             - install
-      - testnode6
-      - testnode8
-      - testnode10
       - publish:
           context: org-global
           requires:
             - test
             - lint
-            - testnode6
-            - testnode8
-            - testnode10
       - glossary:
           context: org-global
           requires:
