@@ -21,8 +21,6 @@ module.exports = function getOneOther(result, data) {
  * @return {Boolean} The conditions meet a one/other use case
  */
 const isOneOther = (result, data) =>
-    typeof result === 'object' &&
-    typeof data === 'object' &&
     has(result, 'one') &&
     has(result, 'other') &&
     has(data, 'count');
