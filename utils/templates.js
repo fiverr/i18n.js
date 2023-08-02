@@ -42,13 +42,6 @@ const INVALID_TEMPLATE_TYPE_ERROR = 'Templates must be functions, instead got:';
 const UNKNOWN_TEMPLATE_NAME_ERROR = 'Templates must be configured, but the following template name is not:';
 
 /**
- * The default transformer function that will be used to transform the tokens
- * array into a string.
- * @type {Function}
- */
-const DEFAULT_TEMPLATES_TRANSFORMER = (tokens) => tokens.join('');
-
-/**
  * Finds all template patterns and wraps them with the template (component)
  * that matches its index, while cleaning up the templates' declaration
  * symbols.
@@ -61,7 +54,7 @@ const DEFAULT_TEMPLATES_TRANSFORMER = (tokens) => tokens.join('');
  *     function
  * @return {String}
  */
-const injectTemplates = ({ originTranslation, templates = {}, templatesTransformer = DEFAULT_TEMPLATES_TRANSFORMER }) => {
+const injectTemplates = ({ originTranslation, templates = {} }) => {
     const translation = originTranslation.replace(TEMPLATE_BR_OPEN_ONLY_REGEX,
         TEMPLATE_BR_SELF_CLOSING_STRING
     );
@@ -82,7 +75,8 @@ const injectTemplates = ({ originTranslation, templates = {}, templatesTransform
         return templateFunc(translationPart);
     });
 
-    return templatesTransformer(injectedTokens);
+    console.warn('HERE injectedTokens', injectedTokens);
+    return injectedTokens;
 };
 
 /**
