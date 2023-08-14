@@ -50,28 +50,45 @@ describe('Template injection', () => {
             });
         });
 
-        describe('When template is not found', () => {
-            it('Should call onTemplateInjectionError hook and return undefined', () => {
-                let reported = false;
+        describe('When templatesTransformer exist', () => {
+            let templatesTransformed = false;
 
-                i18n.onTemplateInjectionError((key, scope, error) => {
-                    reported = true;
-                    expect(key).to.equal('root.templated.custom');
-                    expect(scope).to.equal($scope);
-                    expect(error).to.equal('Templates must be functions, instead got: string ("invalid")');
-                });
+            const templates = {
+                custom: (text) => `<a href="#">${text}</a>`
+            };
+            const templatesTransformer = (tokens) => {
+                templatesTransformed = true;
 
-                const templates = {
-                    custom: 'invalid'
-                };
+                return tokens;
+            };
 
-                const translated = i18n.translate('root.templated.custom', {
-                    templates
-                });
-
-                expect(translated).to.be.undefined;
-                expect(reported).to.be.true;
+            it('Should call templatesTransformer', () => {
+                const translated = i18n.translate('root.templated.custom', { templates, templatesTransformer });
+                expect(translated).to.be.an('array');
+                expect(templatesTransformed).to.be.true;
             });
+
+            it('Should return array', () => {
+                const translated = i18n.translate('root.templated.custom', { templates, templatesTransformer });
+                expect(translated).to.be.an('array');
+            });
+
+            describe('When templates not exist', () => {
+                it('Should not call templatesTransformer', () => {
+                    templatesTransformed = false;
+
+                    i18n.translate('root.templated.custom', { templatesTransformer });
+
+                    expect(templatesTransformed).to.be.false;
+                });
+
+                it('Should return undefined', () => {
+                    const translated = i18n.translate('root.templated.custom', { templatesTransformer });
+
+                    expect(translated).to.be.an('undefined');
+                });
+            });
+
         });
     });
 });
