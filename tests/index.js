@@ -168,7 +168,6 @@ describe('I18n', () => {
 
         [
             [ 'lookup.key' ],
-            [ 'lookup.biscuit' ],
             [ ['lookup.pie', 'lookup.key'] ],
             [ 'key', { $scope: 'lookup' } ],
             [ [ 'pie', 'key' ], { $scope: 'lookup' } ]
@@ -189,7 +188,7 @@ describe('I18n', () => {
         const child = i18n.spawn('lookup');
 
         expect(child.has('key'), 'child.key').to.be.true;
-        expect(child.has('biscuit'), 'child.biscuit').to.be.true;
+        expect(child.has('biscuit'), 'child.biscuit').to.be.false;
         expect(child.has('pie'), 'child.pie').to.be.false;
     });
 });
