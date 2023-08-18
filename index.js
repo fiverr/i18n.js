@@ -28,7 +28,7 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
  * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
  * @param {Function} [options.missing]    Method to call when key is not found
  * @param {Function} [options.empty]      Method to call when value is empty
- *  * @param {Function} [options.templateInjectionError]      Method to call when template
+ * @param {Function} [options.templateInjectionError]      Method to call when template
  */
 class I18n {
     constructor({
@@ -57,8 +57,8 @@ class I18n {
      * @param  {String} key
      * @return {String} A default string for a missing key
      */
-    static getDefault(key= '') {
-        return (key).split('.').pop().replace(/_/g, ' ');
+    static getDefault(key = '') {
+        return key.split('.').pop().replace(/_/g, ' ');
     }
 
     /**
@@ -95,7 +95,7 @@ class I18n {
      * @param  {Object} [data] Interpolation data
      * @return {String} translated and interpolated
      */
-    translate(key, data= {}) {
+    translate(key, data = {}) {
         const { templates, templatesTransformer, ...params } = data;
 
         const keys = Array.isArray(key) ? key : [ key ];

@@ -36,6 +36,55 @@ i18n.t('my.key'); // I'm a sentence
 i18n.t(['my.missing.key', 'my.key']); // I'm a sentence
 ```
 
+### Translate with templates
+
+```js
+const i18n = new I18n({
+    templates: {
+        custom: "I'm a sentence with <t name='link'>link</t>",
+        default: "I'm a sentence with <t name='br'/> line break",
+        for_react: "With <t name='link'>link</t>"
+    }
+});
+```
+1. Custom templates
+```js
+i18n.t('templates.custom', { templates: () => {
+        link: (text) => <a href="/info">{text}</a>
+    }
+}); // I'm a sentence with <a href="info">link</a>
+```
+2. Default templates
+```js
+i18n.t('templates.default', { templates: () => {
+        link: (text) => <a href="/info">{text}</a>
+    }
+});
+// I'm a sentence with <br/> line break
+```
+3. Passing templatesTransformer function
+```js
+import React, { Fragment } from 'react';
+
+export const parseTokensWithTemplates = (tokens = []) => (
+    <>
+        {
+            tokens.map(
+                (token, index) => <Fragment key={index}>{token}</Fragment>
+            )
+        }
+    </>
+);
+
+i18n.t('templates.for_react', {
+    templates: () => {
+        link: (text) => <a href="/info">{text}</a>
+    },
+    templatesTransformer: parseTokensWithTemplates
+});
+// <React.Fragment><React.Fragment>With </React.Fragment><React.Fragment><a href="info">link</a></React.Fragment></React.Fragment>
+```
+
 ### Handle missing
 By default, missing keys or empty values return the last part of the key
 ```js
