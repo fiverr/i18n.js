@@ -103,11 +103,17 @@ workflows:
       - lint:
           requires:
             - install
+      - testnode6
+      - testnode8
+      - testnode10
       - publish:
           context: org-global
           requires:
             - test
             - lint
+            - testnode6
+            - testnode8
+            - testnode10
       - glossary:
           context: org-global
           requires:
