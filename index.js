@@ -28,7 +28,7 @@ const interpolate = paraphrase(/\${([^{}]*)}/g, /%{([^{}]*)}/g, /{{([^{}]*)}}/g)
  * @param {String}   [options.$scope]     Root string to be use for looking for translation keys
  * @param {Function} [options.missing]    Method to call when key is not found
  * @param {Function} [options.empty]      Method to call when value is empty
- * @param {Function} [options.templateInjectionError]      Method to call when template
+ * @param {Function} [options.templateInjectionError]      Method to call when error with template
  */
 class I18n {
     constructor({

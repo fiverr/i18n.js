@@ -10,12 +10,13 @@ const translations = require('./translations.json');
 const i18n = new I18n({translations});
 ```
 
-| Option | Type | Description |
-| ------ | ---- | ----------- |
+| Option | Type | Description                                                                                                       |
+| ------ | ---- |-------------------------------------------------------------------------------------------------------------------|
 | `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
-| `missing` | Function | Call this function when a key is missing. Function accepts arguments: key, scope, translations_object |
-| `empty` | Function | Call this function when a value is empty. Function accepts arguments: key, value, scope, translations_object |
-| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root** |
+| `missing` | Function | Call this function when a key is missing. Function accepts arguments: key, scope, translations_object             |
+| `empty` | Function | Call this function when a value is empty. Function accepts arguments: key, value, scope, translations_object      |
+| `templateInjectionError` | Function | Call this function when templates have error. Function accepts arguments: key, scope, error object                |
+| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root**                       |
 
 ```js
 const i18n = new I18n({
