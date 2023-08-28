@@ -96,12 +96,14 @@ class I18n {
      * @return {String} translated and interpolated
      */
     translate(key, data = {}) {
+        const { templates, templatesTransformer, ...params } = data;
+
         const keys = Array.isArray(key) ? key : [ key ];
 
         // Create key alternatives with prefixes
         const alternatives = [].concat(
             ...keys.map(
-                (key) => this.alternatives(key, data)
+                (key) => this.alternatives(key, params)
             )
         );
 
@@ -109,7 +111,7 @@ class I18n {
         let result = this.find(...alternatives);
 
         // Handle one,other translation structure
-        result = getOneOther(result, data);
+        result = getOneOther(result, params);
 
         if (EMPTY_VALUES.includes(result)) {
             return this[EMPTY](
@@ -118,11 +120,11 @@ class I18n {
         }
 
         const type = typeof result;
-        result = type === 'string' ? interpolate(result, data) : result;
+        result = type === 'string' ? interpolate(result, params) : result;
 
         if (ACCEPTABLE_RETURN_TYPES.includes(type)) {
             if (isTemplateInjectionEligible(result)) {
-                return this.handleTemplateInjection(key, result, data.templates, data.templatesTransformer);
+                return this.handleTemplateInjection(key, result, templates, templatesTransformer);
             }
 
             return result;
