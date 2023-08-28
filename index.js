@@ -96,11 +96,6 @@ class I18n {
      * @return {String} translated and interpolated
      */
     translate(key, data = {}) {
-        const { templates, templatesTransformer } = data;
-
-        delete data.templates;
-        delete data.templatesTransformer;
-
         const keys = Array.isArray(key) ? key : [ key ];
 
         // Create key alternatives with prefixes
@@ -127,7 +122,7 @@ class I18n {
 
         if (ACCEPTABLE_RETURN_TYPES.includes(type)) {
             if (isTemplateInjectionEligible(result)) {
-                return this.handleTemplateInjection(key, result, templates, templatesTransformer);
+                return this.handleTemplateInjection(key, result, data.templates, data.templatesTransformer);
             }
 
             return result;
