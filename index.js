@@ -169,7 +169,8 @@ class I18n {
             []
         );
 
-        return typeof this.find(...alternatives) !== 'undefined';
+        const result = this.find(...alternatives);
+        return typeof result !== 'undefined' && !EMPTY_VALUES.includes(result);
     }
 
     /**
