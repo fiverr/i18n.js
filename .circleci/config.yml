@@ -51,13 +51,13 @@ jobs:
   testnode18:
     <<: *defaults
     docker:
-      - image: circleci/node:18
+      - image: cimg/node:18
     steps:
       - runtests
   testnode20:
     <<: *defaults
     docker:
-      - image: circleci/node:20
+      - image: cimg/node:20
     steps:
       - runtests
   test:
