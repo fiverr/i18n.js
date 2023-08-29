@@ -51,13 +51,13 @@ jobs:
   testnode18:
     <<: *defaults
     docker:
-      - image: cimg/node:18
+      - image: cimg/node:18.17.1
     steps:
       - runtests
   testnode20:
     <<: *defaults
     docker:
-      - image: cimg/node:20
+      - image: cimg/node:20.5.1
     steps:
       - runtests
   test:
