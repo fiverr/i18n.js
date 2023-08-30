@@ -1,7 +1,10 @@
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: circleci/node:12
+    - image: cimg/node:18.17
+      auth:
+        username: $DOCKER_USER
+        password: $DOCKER_PASS
 
 commands:
   runtests:
@@ -23,65 +26,41 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install dependencies
-          command: npm i
+      - run: npm i
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-  testnode12:
-    <<: *defaults
-    docker:
-      - image: circleci/node:12
-    steps:
-      - runtests
-  testnode14:
-    <<: *defaults
-    docker:
-      - image: circleci/node:14
-    steps:
-      - runtests
-  testnode16:
-    <<: *defaults
-    docker:
-      - image: circleci/node:16
-    steps:
-      - runtests
-  testnode18:
-    <<: *defaults
-    docker:
-      - image: cimg/node:18.17.1
-    steps:
-      - runtests
-  testnode20:
-    <<: *defaults
-    docker:
-      - image: cimg/node:20.5.1
-    steps:
-      - runtests
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./node_modules
   test:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Run tests
-          command: npm t
-  lint:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Check syntax
-          command: npm run lint -- --plugin log
-  publish:
+      - attach_workspace:
+          at: .
+      - run: npm t
+      - run: npm run lint -- --plugin log
+  compatibility:
+    parameters:
+      image:
+        description: "node version"
+        default: "lts"
+        type: string
     <<: *defaults
     docker:
-      - image: circleci/node:12
+      - image: "cimg/node:<<parameters.image>>"
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm t
+  publish:
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -108,28 +87,26 @@ workflows:
   version: 2.1
   ci-cd:
     jobs:
-      - install
+      - install:
+          context: org-global
+      - compatibility:
+          context: org-global
+          matrix:
+            parameters:
+              image:
+                - "14.21"
+                - "16.20"
+                # - "18.17" // default image
+                - "20.5"
       - test:
+          context: org-global
           requires:
             - install
-      - lint:
-          requires:
-            - install
-      - testnode12
-      - testnode14
-      - testnode16
-      - testnode18
-      - testnode20
       - publish:
           context: org-global
           requires:
             - test
-            - lint
-            - testnode12
-            - testnode14
-            - testnode16
-            - testnode18
-            - testnode20
+            - compatibility
       - glossary:
           context: org-global
           requires:
