@@ -23,15 +23,14 @@ jobs:
           root: .
           paths:
             - ./node_modules
-  test:
+  lint:
     <<: *defaults
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - run: npm t
       - run: npm run lint -- --plugin log
-  compatibility:
+  test:
     parameters:
       image:
         description: "node version"
@@ -77,16 +76,16 @@ workflows:
     jobs:
       - install:
           context: org-global
-      - compatibility:
+      - test:
           context: org-global
           matrix:
             parameters:
               image:
                 - "14.21"
                 - "16.20"
-                # - "18.17" // default image
+                - "18.17"
                 - "20.5"
-      - test:
+      - lint:
           context: org-global
           requires:
             - install
@@ -94,7 +93,7 @@ workflows:
           context: org-global
           requires:
             - test
-            - compatibility
+            - lint
       - glossary:
           context: org-global
           requires:
