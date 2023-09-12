@@ -33,7 +33,7 @@ describe('Template injection', () => {
         });
 
         describe('When template is not found', () => {
-            it('Should call onTemplateInjectionError hook and return undefined', () => {
+            it('Should call onTemplateInjectionError hook and return key name', () => {
                 let reported = false;
 
                 i18n.onTemplateInjectionError((key, scope, error) => {
@@ -45,7 +45,7 @@ describe('Template injection', () => {
 
                 const translated = i18n.translate('root.templated.custom');
 
-                expect(translated).to.be.undefined;
+                expect(translated).to.equal('custom');
                 expect(reported).to.be.true;
             });
         });
@@ -82,10 +82,10 @@ describe('Template injection', () => {
                     expect(templatesTransformed).to.be.false;
                 });
 
-                it('Should return undefined', () => {
+                it('Should return key', () => {
                     const translated = i18n.translate('root.templated.custom', { templatesTransformer });
 
-                    expect(translated).to.be.an('undefined');
+                    expect(translated).to.equal('custom');
                 });
             });
 
