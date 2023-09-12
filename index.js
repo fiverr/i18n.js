@@ -4,7 +4,7 @@
  */
 
 const get = require('lodash.get');
-const paraphrase = require('paraphrase');
+const { paraphrase } = require('paraphrase');
 const assign = require('@recursive/assign');
 const freeze = require('deep-freeze');
 const _global = require('./utils/glob');
