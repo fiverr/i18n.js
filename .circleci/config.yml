@@ -2,18 +2,9 @@ defaults: &defaults
   working_directory: ~/app
   docker:
     - image: circleci/node:12
-
-commands:
-  runtests:
-    description: "Checkout, install dependencies, and run tests"
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: npm i
-      - run:
-          name: Run tests
-          command: npm t
+      auth:
+        username: $DOCKER_USER
+        password: $DOCKER_PASS
 
 version: 2.1
 jobs:
@@ -23,47 +14,40 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install dependencies
-          command: npm i
+      - run: npm i
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-  testnode8:
-    <<: *defaults
-    docker:
-      - image: circleci/node:8
-    steps:
-      - runtests
-  testnode10:
-    <<: *defaults
-    docker:
-      - image: circleci/node:10
-    steps:
-      - runtests
-  test:
-    <<: *defaults
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Run tests
-          command: npm t
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./node_modules
   lint:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Check syntax
-          command: npm run lint -- --plugin log
-  publish:
+      - attach_workspace:
+          at: .
+      - run: npm run lint -- --plugin log
+  test:
+    parameters:
+      image:
+        description: "node version"
+        default: "lts"
+        type: string
     <<: *defaults
     docker:
-      - image: circleci/node:8
+      - image: "<<parameters.image>>"
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm t
+  publish:
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -90,22 +74,29 @@ workflows:
   version: 2.1
   ci-cd:
     jobs:
-      - install
+      - install:
+          context: org-global
       - test:
-          requires:
-            - install
+          context: org-global
+          matrix:
+            parameters:
+              image:
+                - "circleci/node:6.11.5"
+                - "circleci/node:8"
+                - "circleci/node:10"
+                - "cimg/node:14.21"
+                - "cimg/node:16.20"
+                - "cimg/node:18.17"
+                - "cimg/node:20.5"
       - lint:
+          context: org-global
           requires:
             - install
-      - testnode8
-      - testnode10
       - publish:
           context: org-global
           requires:
             - test
             - lint
-            - testnode8
-            - testnode10
       - glossary:
           context: org-global
           requires:
