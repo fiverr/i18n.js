@@ -3,7 +3,7 @@
  * @since 1.0.0
  */
 
-const { get } = require('lodash');
+const { get, omit } = require('lodash');
 const paraphrase = require('paraphrase');
 const assign = require('@recursive/assign');
 const freeze = require('deep-freeze');
@@ -96,7 +96,8 @@ class I18n {
      * @return {String} translated and interpolated
      */
     translate(key, data = {}) {
-        const { templates, templatesTransformer, ...params } = data;
+        const { templates, templatesTransformer } = data;
+        const params = omit(data, ['templates', 'templatesTransformer']);
 
         const keys = Array.isArray(key) ? key : [ key ];
 

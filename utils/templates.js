@@ -1,3 +1,5 @@
+const { values } = require('lodash');
+
 /**
  * The regex used to match the name of the template
  * @type {RegExp}
@@ -142,7 +144,7 @@ const validateTemplates = (templateNames, templates) => {
         .filter((templateName, i) => (i % 2 === 1 && !templates[templateName]))
         .forEach(throwUnknownTemplateError);
 
-    Object.values(templates).
+    values(templates).
         filter((template) => !isFunction(template)).
         forEach(throwInvalidTemplateError);
 };
