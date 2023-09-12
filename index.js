@@ -152,7 +152,7 @@ class I18n {
         } catch (error) {
             return this[TEMPLATE_INJECTION_ERROR](
                 `${key}`, this.$scope, error.message
-            );
+            ) || I18n.getDefault(key);
         }
     }
 
