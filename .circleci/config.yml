@@ -34,7 +34,7 @@ jobs:
     parameters:
       image:
         description: "node version"
-        default: "lts"
+        default: "cimg/node:lts"
         type: string
     <<: *defaults
     docker:
