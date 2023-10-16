@@ -7,6 +7,29 @@ const $scope = 'controller_name.action_name';
 describe('Template injection', () => {
     const i18n = new I18n({ translations, $scope });
 
+    describe('When predefined template used', () => {
+        it('Should inject predefined template', () => {
+            const translated = i18n.translate('root.templated.predefined');
+
+            expect(translated).to.equal('Should have italic style <i>here</i>');
+        });
+
+        it('Should inject multiple predefined templates', () => {
+            const translated = i18n.translate('root.templated.predefined_multiple');
+
+            expect(translated).to.equal('Should have first breaking line <br/> here and <br/> here');
+        });
+
+        it('Should inject both custom and predefined templates', () => {
+            const templates = {
+                custom: (text) => `<span>${text}</span>`
+            };
+            const translated = i18n.translate('root.templated.predefined_and_custom', { templates });
+
+            expect(translated).to.equal('Should have both <i>predefined</i> and custom templates <span>here</span>');
+        });
+    });
+
     describe('When a custom template is provided', () => {
         describe('When full enclosed tag', () => {
             it('Should inject custom template', () => {

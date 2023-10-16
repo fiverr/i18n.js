@@ -50,6 +50,14 @@ const UNKNOWN_TEMPLATE_NAME_ERROR = 'Templates must be configured, but the follo
  */
 const DEFAULT_TEMPLATES_TRANSFORMER = (tokens) => tokens.join('');
 
+const PREDEFINED_TEMPLATES = {
+    'b': (text) => `<b>${text}</b>`,
+    'u': (text) => `<u>${text}</u>`,
+    'i': (text) => `<i>${text}</i>`,
+    'span': (text) => `<span>${text}</span>`,
+    'br': () => '<br/>'
+};
+
 /**
  * Finds all template patterns and wraps them with the template (component)
  * that matches its index, while cleaning up the templates' declaration
@@ -70,12 +78,14 @@ const injectTemplates = ({ originTranslation, templates = {}, templatesTransform
     const templateNames = translation.split(TEMPLATE_ELEMENT_NAMES_REGEX);
     const tokens = extractTokens(translation);
 
-    validateTemplates(templateNames, templates);
+    validateTemplates(templateNames, { ...PREDEFINED_TEMPLATES, ...templates });
+    const allTemplates = { ...PREDEFINED_TEMPLATES, ...templates };
 
     const injectedTokens = tokens.map((translationPart, index) => {
         const templateName = templateNames[index];
-        const templateFunc = templates[templateName];
-        const isTemplate = index % 2 === 1;
+        console.warn('templateName', templateName);
+        const templateFunc = allTemplates[templateName];
+        const isTemplate = index !== 0;
 
         if (!isTemplate || !templateFunc || !isFunction(templateFunc)) {
             return translationPart;
@@ -114,7 +124,7 @@ const extractTokens = (translation) => {
 
     translation.split(TEMPLATE_OPEN_CLOSE_ELEMENT_CONTENT_REGEX).forEach((translationFirstPart) => {
         translationFirstPart.split(TEMPLATE_SELF_CLOSING_ELEMENT_CONTENT_REGEX).forEach((translationSecondPart, i) => {
-            if (i % 2 === 1) {
+            if (i !== 0) {
                 templateTokens.push(''); // every second item should be an empty text because it's self-closing element
             }
             templateTokens.push(translationSecondPart);
