@@ -150,10 +150,7 @@ const isFunction = (fn) => typeof fn === 'function';
  */
 const validateTemplates = (templateNames, templates) => {
     templateNames
-        .filter((templateName, i) => {
-            console.warn('HEREEEE', i, templateName, templates[templateName]);
-            return (i % 2 === 1 && !templates[templateName]);
-        })
+        .filter((templateName, i) => (i % 2 === 1 && !templates[templateName]))
         .forEach(throwUnknownTemplateError);
 
     values(templates).
