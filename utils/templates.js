@@ -78,14 +78,13 @@ const injectTemplates = ({ originTranslation, templates = {}, templatesTransform
     const templateNames = translation.split(TEMPLATE_ELEMENT_NAMES_REGEX);
     const tokens = extractTokens(translation);
 
-    validateTemplates(templateNames, { ...PREDEFINED_TEMPLATES, ...templates });
-    const allTemplates = { ...PREDEFINED_TEMPLATES, ...templates };
+    const allTemplates = Object.assign({}, PREDEFINED_TEMPLATES, templates);
+    validateTemplates(templateNames, allTemplates);
 
     const injectedTokens = tokens.map((translationPart, index) => {
         const templateName = templateNames[index];
-        console.warn('templateName', templateName);
         const templateFunc = allTemplates[templateName];
-        const isTemplate = index !== 0;
+        const isTemplate = index % 2 === 1;
 
         if (!isTemplate || !templateFunc || !isFunction(templateFunc)) {
             return translationPart;
@@ -151,7 +150,10 @@ const isFunction = (fn) => typeof fn === 'function';
  */
 const validateTemplates = (templateNames, templates) => {
     templateNames
-        .filter((templateName, i) => (i % 2 === 1 && !templates[templateName]))
+        .filter((templateName, i) => {
+            console.warn('HEREEEE', i, templateName, templates[templateName]);
+            return (i % 2 === 1 && !templates[templateName]);
+        })
         .forEach(throwUnknownTemplateError);
 
     values(templates).
