@@ -38,7 +38,7 @@ i18n.t(['my.missing.key', 'my.key']); // I'm a sentence
 ```
 
 ### Translate with templates
-There are several templates that are used by default:
+There are several predefined templates that are used by default:
 - `b` - for bolder text - <t name='b'>example</t>
 - `u` - for underlined text - <t name='u'>example</t>
 - `i` - for italic text - <t name='i'>example</t>
@@ -46,7 +46,7 @@ There are several templates that are used by default:
 - `br` - for breakline - <t name='br'/>
 
 Custom templates could be passed as function in templates option as object.
-templatesTransformer function could be passed to transform tokens to React components.
+`templatesTransformer` function could be passed to transform tokens to React components.
 
 ```js
 const i18n = new I18n({
