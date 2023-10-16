@@ -22,11 +22,11 @@ describe('Template injection', () => {
 
         it('Should inject both custom and predefined templates', () => {
             const templates = {
-                custom: (text) => `<span>${text}</span>`
+                custom: (text) => `<div>${text}</div>`
             };
             const translated = i18n.translate('root.templated.predefined_and_custom', { templates });
 
-            expect(translated).to.equal('Should have both <i>predefined</i> and custom templates <span>here</span>');
+            expect(translated).to.equal('Should have both <i>predefined</i> and custom templates <div>here</div>');
         });
     });
 
