@@ -1,6 +1,6 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Translation helper",
   "keywords": [
     "i18n",
@@ -25,7 +25,7 @@
   "dependencies": {
     "@recursive/assign": "^2.0.2",
     "deep-freeze": "0.0.1",
-    "lodash": "^4.17.21",
+    "lodash.get": "^4.4.2",
     "paraphrase": "^1.7.3"
   },
   "devDependencies": {

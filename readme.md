@@ -10,13 +10,12 @@ const translations = require('./translations.json');
 const i18n = new I18n({translations});
 ```
 
-| Option | Type | Description                                                                                                       |
-| ------ | ---- |-------------------------------------------------------------------------------------------------------------------|
+| Option | Type | Description |
+| ------ | ---- | ----------- |
 | `translations` | Object | Representation of translation structure **Must be JSON compliant** otherwise will be treated like an empty object |
-| `missing` | Function | Call this function when a key is missing. Function accepts arguments: key, scope, translations_object             |
-| `empty` | Function | Call this function when a value is empty. Function accepts arguments: key, value, scope, translations_object      |
-| `templateInjectionError` | Function | Call this function when templates have error. Function accepts arguments: key, scope, error object                |
-| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root**                       |
+| `missing` | Function | Call this function when a key is missing. Function accepts arguments: key, scope, translations_object |
+| `empty` | Function | Call this function when a value is empty. Function accepts arguments: key, value, scope, translations_object |
+| `$scope` | String | Omittable prefix. see [Scope](#instance-with-a-scope) **The base is translations key root** |
 
 ```js
 const i18n = new I18n({
@@ -35,64 +34,6 @@ i18n.t('my.key'); // I'm a sentence
 ### Find alternatives
 ```js
 i18n.t(['my.missing.key', 'my.key']); // I'm a sentence
-```
-
-### Translate with templates
-There are several predefined templates that are used by default:
-- `b` - for bolder text - <t name='b'>example</t>
-- `u` - for underlined text - <t name='u'>example</t>
-- `i` - for italic text - <t name='i'>example</t>
-- `span` - for span around text - <t name='span'>example</t>
-- `br` - for breakline - <t name='br'/>
-
-Custom templates could be passed as function in templates option as object.
-`templatesTransformer` function could be passed to transform tokens to React components.
-
-```js
-const i18n = new I18n({
-    templates: {
-        custom: "I'm a sentence with <t name='link'>link</t>",
-        default: "I'm a sentence with <t name='br'/> line break",
-        for_react: "With <t name='link'>link</t>"
-    }
-});
-```
-1. Custom templates
-```js
-i18n.t('templates.custom', { templates: () => {
-        link: (text) => <a href="/info">{text}</a>
-    }
-}); // I'm a sentence with <a href="info">link</a>
-```
-2. Default templates
-```js
-i18n.t('templates.default', { templates: () => {
-        link: (text) => <a href="/info">{text}</a>
-    }
-});
-// I'm a sentence with <br/> line break
-```
-3. Passing templatesTransformer function
-```js
-import React, { Fragment } from 'react';
-
-export const parseTokensWithTemplates = (tokens = []) => (
-    <>
-        {
-            tokens.map(
-                (token, index) => <Fragment key={index}>{token}</Fragment>
-            )
-        }
-    </>
-);
-
-i18n.t('templates.for_react', {
-    templates: () => {
-        link: (text) => <a href="/info">{text}</a>
-    },
-    templatesTransformer: parseTokensWithTemplates
-});
-// <React.Fragment><React.Fragment>With </React.Fragment><React.Fragment><a href="info">link</a></React.Fragment></React.Fragment>
 ```
 
 ### Handle missing
