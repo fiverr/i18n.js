@@ -1,6 +1,6 @@
 {
   "name": "@fiverr/i18n",
-  "version": "1.9.0",
+  "version": "1.9.2-rc",
   "description": "Translation helper",
   "keywords": [
     "i18n",
