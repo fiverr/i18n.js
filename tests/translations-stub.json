@@ -11,12 +11,21 @@
         "is": {
             "a": {
                 "number": 1,
-                "object": {"a": 2},
+                "object": {
+                  "a": 2
+                },
                 "boolean": false
             }
         },
         "interpolated": {
             "phrase": "Please replace %{item} with %{item} and %{another} thing"
+        },
+        "templated": {
+          "custom": "Please click <t name='custom'>here</t> to continue",
+          "self_enclosing": "Please click <t name='custom'/> to continue",
+          "predefined": "Should have italic style <t name='i'>here</t>",
+          "predefined_multiple": "Should have first breaking line <t name='br'/> here and <t name='br'/> here",
+          "predefined_and_custom": "Should have both <t name='i'>predefined</t> and custom templates <t name='custom'>here</t>"
         }
     },
     "controller_name": {
