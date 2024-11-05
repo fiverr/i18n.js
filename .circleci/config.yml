@@ -69,7 +69,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
