@@ -1,4 +1,5 @@
-npm-debug.log
 .*
 circle.yml
-test/*
+*.md
+test
+src
