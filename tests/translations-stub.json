@@ -1,50 +1,50 @@
 {
-    "root": {
-        "user": {
-            "name": "Martin",
-            "last": "Prince"
-        },
-        "wait": {
-            "one": "Wait one day",
-            "other": "Wait %{count} days"
-        },
-        "is": {
-            "a": {
-                "number": 1,
-                "object": {"a": 2},
-                "boolean": false
-            }
-        },
-        "interpolated": {
-            "phrase": "Please replace %{item} with %{item} and %{another} thing"
-        }
+  "root": {
+    "user": {
+      "name": "Martin",
+      "last": "Prince"
     },
-    "controller_name": {
-        "action_name": {
-            "i": {
-                "am": {
-                    "in": {
-                        "scope": "I am in scope"
-                    }
-                }
-            }
-        }
+    "wait": {
+      "one": "Wait one day",
+      "other": "Wait %{count} days"
     },
-    "another_controller_name": {
-        "action_name": {
-            "i": {
-                "am": {
-                    "in": {
-                        "scope": "I am in a different scope"
-                    }
-                }
-            }
-        }
+    "is": {
+      "a": {
+        "number": 1,
+        "object": { "a": 2 },
+        "boolean": false
+      }
     },
-    "en": {
-        "title": "My App",
-        "page": {
-            "title": "My Page"
-        }
+    "interpolated": {
+      "phrase": "Please replace %{item} with %{item} and %{another} thing"
     }
+  },
+  "controller_name": {
+    "action_name": {
+      "i": {
+        "am": {
+          "in": {
+            "scope": "I am in scope"
+          }
+        }
+      }
+    }
+  },
+  "another_controller_name": {
+    "action_name": {
+      "i": {
+        "am": {
+          "in": {
+            "scope": "I am in a different scope"
+          }
+        }
+      }
+    }
+  },
+  "en": {
+    "title": "My App",
+    "page": {
+      "title": "My Page"
+    }
+  }
 }
